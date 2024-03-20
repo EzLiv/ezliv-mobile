@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ezliv-mobile</string>
     <string name="title_activity_main2">MainActivity2</string>
+    <string name="title_activity_mural">Mural</string>
 </resources>
