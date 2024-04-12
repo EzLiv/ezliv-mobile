@@ -1,7 +1,5 @@
-package com.example.ezliv_mobile
+package com.example.ezliv_mobile.ui.screens
 
-import android.graphics.drawable.Icon
-import android.net.wifi.hotspot2.pps.HomeSp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 //import androidx.compose.foundation.layout.FlowColumnScopeInstance.align
 //import androidx.compose.foundation.layout.FlowColumnScopeInstance.align
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,12 +16,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -39,8 +34,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ezliv_mobile.ui.components.Aviso
 import com.example.ezliv_mobile.ui.theme.EzlivmobileTheme
-import org.w3c.dom.Text
 
 class Mural : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -200,49 +195,7 @@ fun itemRodape3() {
     }
 }
 
-@Composable
-fun Aviso() {
-    Box (
-        modifier = Modifier
-            .width(328.dp)
-            .height(208.dp)
-            .background(
-                color = Color(android.graphics.Color.parseColor("#D9D9D9"))),
-    ) {
-        Column(
 
-        ) {
-            Text(
-                text = "Manutenção no elevador",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = Color(android.graphics.Color.parseColor("#D4D4D4")))
-                    .padding(vertical = 8.dp),
-                textAlign = TextAlign.Center
-
-            )
-            Text(
-                text = "Fechado durante o dia para a manutenção do elevador do bloco 5, " +
-                        "nesse período é importante que façam o uso das escadas de emergência\n",
-                modifier = Modifier
-                    .padding(top = 20.dp, start = 16.dp, end = 16.dp)
-
-
-            )
-            Text(
-                text = "Lucas Pedrosa",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = Color(android.graphics.Color.parseColor("#D4D4D4")))
-                    .padding(vertical = 8.dp),
-                textAlign = TextAlign.Center
-
-            )
-
-        }
-    }
-
-}
 
 @Preview(showBackground = true)
 @Composable
