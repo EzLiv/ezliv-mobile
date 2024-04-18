@@ -32,7 +32,9 @@ fun Header (){
                 .fillMaxWidth()
                 .background(color = Color.Red)
                 .height(58.dp)
-                .padding(10.dp)
+                .padding(10.dp),
+            Arrangement.Absolute.Left,
+            Alignment.CenterVertically
         ){
             Icon(
                 imageVector = Icons.Default.ArrowBack,
