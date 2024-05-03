@@ -1,4 +1,4 @@
-package com.example.ezliv_mobile.ui.provider
+package com.example.ezliv_mobile.ui.data.provider
 
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
