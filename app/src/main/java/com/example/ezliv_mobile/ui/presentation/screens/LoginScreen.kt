@@ -1,4 +1,4 @@
-package com.example.ezliv_mobile.ui.screens
+package com.example.ezliv_mobile.ui.presentation.screens
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -39,42 +39,48 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.ezliv_mobile.R
-import com.example.ezliv_mobile.ui.theme.EzlivmobileTheme
+import com.example.ezliv_mobile.ui.presentation.theme.EzlivmobileTheme
 
-class MainActivity2 : ComponentActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            EzlivmobileTheme {
-
+            val navController = rememberNavController();
+            NavHost(navController = navController, startDestination = "login") {
+                composable("login") { Login(navController) }
+                composable("mural") { MuralComponent(navController) }
             }
         }
     }
 }
 
 @Composable
-fun RegisterPassword() {
+fun Login(navController : NavController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color(0xFF012A4A))
     ) {
-        LogoEzliv()
-        NewPasswordTextField()
+        Logo()
+        EmailTextField()
         Spacer(modifier = Modifier.height(4.dp))
-        ConfirmPasswordTextField()
+        PasswordTextField()
         Spacer(modifier = Modifier.height(12.dp))
-        PasswordButton(onClick = { /*TODO*/ })
+        LoginButton(onClick = {navController.navigate("mural")})
         Spacer(modifier = Modifier.height(30.dp))
-        IconBottom()
+        ImageIconBottom()
 
     }
 }
 
 @Composable
-fun LogoEzliv() {
+fun Logo() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -89,21 +95,21 @@ fun LogoEzliv() {
 
 }
 @Composable
-fun NewPasswordTextField() {
-    var novaSenha by remember { mutableStateOf(value = "") }
+fun EmailTextField() {
+    var email by remember { mutableStateOf(value = "") }
 
     TextField(
-        value = novaSenha,
+        value = email,
         leadingIcon = {
             Icon(
-                imageVector = Icons.Default.Lock,
+                imageVector = Icons.Default.MailOutline,
                 contentDescription = "emailIcon",
                 tint = Color.White
             )
         },
-        onValueChange = { novaSenha = it },
-        label = { Text(text = "Nova Senha", color = Color.White) },
-        placeholder = { Text(text = "Nova Senha") },
+        onValueChange = { email = it },
+        label = { Text(text = "Email", color = Color.White) },
+        placeholder = { Text(text = "E-mail") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         modifier = Modifier
             .clip(RoundedCornerShape(topEnd = 15.dp, topStart = 15.dp))
@@ -113,7 +119,7 @@ fun NewPasswordTextField() {
 }
 
 @Composable
-fun ConfirmPasswordTextField() {
+fun PasswordTextField() {
     var senha by remember { mutableStateOf(value = "") }
     TextField(
         value = senha,
@@ -125,8 +131,8 @@ fun ConfirmPasswordTextField() {
             )
         },
         onValueChange = { senha = it },
-        label = { Text(text = "Confirme a senha", color = Color.White) },
-        placeholder = { Text(text = "Confirme a senha") },
+        label = { Text(text = "Senha", color = Color.White) },
+        placeholder = { Text(text = "Senha") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         modifier = Modifier
             .clip(RoundedCornerShape(bottomEnd = 15.dp, bottomStart = 15.dp))
@@ -137,7 +143,7 @@ fun ConfirmPasswordTextField() {
 }
 
 @Composable
-fun PasswordButton(onClick: () -> Unit) {
+fun LoginButton(onClick: () -> Unit) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF001A2E)),
@@ -146,12 +152,12 @@ fun PasswordButton(onClick: () -> Unit) {
             .width(300.dp)
             .height(55.dp)
     ) {
-        Text(text = "Redefinir", fontSize = 20.sp)
+        Text(text = "Entrar", fontSize = 20.sp)
     }
 }
 
 @Composable
-fun IconBottom() {
+fun ImageIconBottom() {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -167,10 +173,4 @@ fun IconBottom() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun RegisterPasswordPreview() {
-    EzlivmobileTheme {
-        RegisterPassword()
-    }
-}
+

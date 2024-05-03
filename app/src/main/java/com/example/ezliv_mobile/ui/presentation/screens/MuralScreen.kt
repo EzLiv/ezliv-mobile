@@ -1,4 +1,4 @@
-package com.example.ezliv_mobile.ui.screens
+package com.example.ezliv_mobile.ui.presentation.screens
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -34,8 +34,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.ezliv_mobile.ui.components.Aviso
-import com.example.ezliv_mobile.ui.theme.EzlivmobileTheme
+import androidx.navigation.NavController
+import com.example.ezliv_mobile.ui.presentation.components.Aviso
+import com.example.ezliv_mobile.ui.presentation.theme.EzlivmobileTheme
 
 class Mural : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +48,7 @@ class Mural : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Aviso()
+
                 }
             }
         }
@@ -55,9 +56,9 @@ class Mural : ComponentActivity() {
 }
 
 @Composable
-fun mural(
-
-){
+fun MuralComponent(
+    navController: NavController
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -66,17 +67,17 @@ fun mural(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-    Cabecalho()
-    Aviso()
-    Aviso()
-    rodape()
+        Cabecalho()
+        Aviso()
+        Aviso()
+        Rodape()
 
     }
 
 }
 
 @Composable
-fun Cabecalho(){
+fun Cabecalho() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -84,7 +85,7 @@ fun Cabecalho(){
             .height(65.dp)
 
     ) {
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp),
@@ -107,7 +108,7 @@ fun Cabecalho(){
 }
 
 @Composable
-fun rodape() {
+fun Rodape() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -192,15 +193,5 @@ fun itemRodape3() {
             text = "Reservas",
             style = TextStyle(color = Color.White)
         )
-    }
-}
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
-    EzlivmobileTheme {
-        mural()
     }
 }

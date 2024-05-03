@@ -1,4 +1,4 @@
-package com.example.ezliv_mobile.ui.theme
+package com.example.ezliv_mobile.ui.presentation.theme
 
 import android.app.Activity
 import android.os.Build

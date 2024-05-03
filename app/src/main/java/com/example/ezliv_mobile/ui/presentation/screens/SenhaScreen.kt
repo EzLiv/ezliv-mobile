@@ -1,4 +1,4 @@
-package com.example.ezliv_mobile.ui.screens
+package com.example.ezliv_mobile.ui.presentation.screens
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MailOutline
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -40,9 +40,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ezliv_mobile.R
-import com.example.ezliv_mobile.ui.theme.EzlivmobileTheme
+import com.example.ezliv_mobile.ui.presentation.theme.EzlivmobileTheme
 
-class MainActivity : ComponentActivity() {
+class MainActivity2 : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -54,27 +54,27 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Login() {
+fun RegisterPassword() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color(0xFF012A4A))
     ) {
-        Logo()
-        EmailTextField()
+        LogoEzliv()
+        NewPasswordTextField()
         Spacer(modifier = Modifier.height(4.dp))
-        PasswordTextField()
+        ConfirmPasswordTextField()
         Spacer(modifier = Modifier.height(12.dp))
-        LoginButton(onClick = { /*TODO*/ })
+        PasswordButton(onClick = { /*TODO*/ })
         Spacer(modifier = Modifier.height(30.dp))
-        ImageIconBottom()
+        IconBottom()
 
     }
 }
 
 @Composable
-fun Logo() {
+fun LogoEzliv() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -89,21 +89,21 @@ fun Logo() {
 
 }
 @Composable
-fun EmailTextField() {
-    var email by remember { mutableStateOf(value = "") }
+fun NewPasswordTextField() {
+    var novaSenha by remember { mutableStateOf(value = "") }
 
     TextField(
-        value = email,
+        value = novaSenha,
         leadingIcon = {
             Icon(
-                imageVector = Icons.Default.MailOutline,
+                imageVector = Icons.Default.Lock,
                 contentDescription = "emailIcon",
                 tint = Color.White
             )
         },
-        onValueChange = { email = it },
-        label = { Text(text = "Email", color = Color.White) },
-        placeholder = { Text(text = "E-mail") },
+        onValueChange = { novaSenha = it },
+        label = { Text(text = "Nova Senha", color = Color.White) },
+        placeholder = { Text(text = "Nova Senha") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         modifier = Modifier
             .clip(RoundedCornerShape(topEnd = 15.dp, topStart = 15.dp))
@@ -113,7 +113,7 @@ fun EmailTextField() {
 }
 
 @Composable
-fun PasswordTextField() {
+fun ConfirmPasswordTextField() {
     var senha by remember { mutableStateOf(value = "") }
     TextField(
         value = senha,
@@ -125,8 +125,8 @@ fun PasswordTextField() {
             )
         },
         onValueChange = { senha = it },
-        label = { Text(text = "Senha", color = Color.White) },
-        placeholder = { Text(text = "Senha") },
+        label = { Text(text = "Confirme a senha", color = Color.White) },
+        placeholder = { Text(text = "Confirme a senha") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         modifier = Modifier
             .clip(RoundedCornerShape(bottomEnd = 15.dp, bottomStart = 15.dp))
@@ -137,7 +137,7 @@ fun PasswordTextField() {
 }
 
 @Composable
-fun LoginButton(onClick: () -> Unit) {
+fun PasswordButton(onClick: () -> Unit) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF001A2E)),
@@ -146,12 +146,12 @@ fun LoginButton(onClick: () -> Unit) {
             .width(300.dp)
             .height(55.dp)
     ) {
-        Text(text = "Entrar", fontSize = 20.sp)
+        Text(text = "Redefinir", fontSize = 20.sp)
     }
 }
 
 @Composable
-fun ImageIconBottom() {
+fun IconBottom() {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -169,8 +169,8 @@ fun ImageIconBottom() {
 
 @Preview(showBackground = true)
 @Composable
-fun LoginPreview() {
+fun RegisterPasswordPreview() {
     EzlivmobileTheme {
-        Login()
+        RegisterPassword()
     }
 }

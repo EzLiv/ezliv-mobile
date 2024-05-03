@@ -1,4 +1,4 @@
-package com.example.ezliv_mobile.ui.components
+package com.example.ezliv_mobile.ui.presentation.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

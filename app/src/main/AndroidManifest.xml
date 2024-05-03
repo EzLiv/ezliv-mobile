@@ -13,17 +13,17 @@
         android:theme="@style/Theme.Ezlivmobile"
         tools:targetApi="31">
         <activity
-            android:name=".ui.screens.Mural"
+            android:name=".ui.presentation.screens.Mural"
             android:exported="false"
             android:label="@string/title_activity_mural"
             android:theme="@style/Theme.Ezlivmobile" />
         <activity
-            android:name=".ui.screens.MainActivity2"
+            android:name=".ui.presentation.screens.MainActivity2"
             android:exported="false"
             android:label="@string/title_activity_main2"
             android:theme="@style/Theme.Ezlivmobile" />
         <activity
-            android:name=".ui.screens.MainActivity"
+            android:name=".ui.presentation.screens.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Ezlivmobile">

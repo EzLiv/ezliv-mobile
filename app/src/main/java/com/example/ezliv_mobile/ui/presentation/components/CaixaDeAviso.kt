@@ -1,4 +1,4 @@
-package com.example.ezliv_mobile.ui.components
+package com.example.ezliv_mobile.ui.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
