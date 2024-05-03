@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -38,7 +39,7 @@ import androidx.compose.ui.unit.sp
 fun BoxReserva() {
 
     Box(modifier = Modifier
-        .background(Color.LightGray)
+        .background(color = Color(0xFFD9D9D9))
         .height(455.dp)
         .width(360.dp)
         .clip(shape = RoundedCornerShape(12.dp))) {
@@ -52,13 +53,13 @@ fun BoxReserva() {
 
                 fontWeight = FontWeight.Bold,
                 fontSize = 26.sp,
-                color = Color.LightGray,
+                color = Color(0xFF012A4A),
                 textAlign = TextAlign.Center,
 
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(0.dp, 0.dp, 0.dp, 20.dp)
-                    .background(Color.Gray)
+                    .background(color = Color(0xFFCDCBCB))
 
                     .height(70.dp)
                     .padding(top = 12.dp)
@@ -71,8 +72,8 @@ fun BoxReserva() {
                 mutableStateOf("")
             }
             Text(
-                text = "Aréa",
-                color = Color.DarkGray,
+                text = "Área",
+                color = Color(0xFF012A4A),
                 fontWeight = FontWeight.Bold,
                 fontSize = 19.sp,
                 textAlign = TextAlign.Start,
@@ -83,13 +84,12 @@ fun BoxReserva() {
             OutlinedTextField(
                 modifier = Modifier
                     .clip(RoundedCornerShape(7.dp))
-                    .background(Color.Gray)
+                    .background(color = Color(0xFFCDCBCB))
                     .height(55.dp)
                     .width(310.dp)
 
                     .align(Alignment.CenterHorizontally),
                 leadingIcon = {
-                    // Icon composable here
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
                         contentDescription = "Aréa",
@@ -119,7 +119,7 @@ fun BoxReserva() {
                 text = "Data",
                 fontWeight = FontWeight.Bold,
                 fontSize = 19.sp,
-                color = Color.DarkGray,
+                color = Color(0xFF012A4A),
                 textAlign = TextAlign.Start,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -131,11 +131,10 @@ fun BoxReserva() {
                     .clip(RoundedCornerShape(7.dp))
                     .height(55.dp)
                     .width(310.dp)
-                    .background(Color.Gray)
+                    .background(color = Color(0xFFCDCBCB))
                     .align(Alignment.CenterHorizontally),
                 value = data,
                 leadingIcon = {
-                    // Icon composable here
                     Icon(imageVector = Icons.Default.DateRange, contentDescription = "Data")
                 },
                 onValueChange = {
@@ -156,7 +155,7 @@ fun BoxReserva() {
             Text(
                 text = "Hora",
                 fontWeight = FontWeight.Bold,
-                color = Color.DarkGray,
+                color = Color(0xFF012A4A),
                 fontSize = 19.sp,
                 textAlign = TextAlign.Start,
                 modifier = Modifier
@@ -170,7 +169,7 @@ fun BoxReserva() {
                     .height(55.dp)
                     .clip(RoundedCornerShape(7.dp))
                     .width(310.dp)
-                    .background(Color.Gray)
+                    .background(color = Color(0xFFCDCBCB))
                     .align(Alignment.CenterHorizontally),
                 value = hora,
                 onValueChange = {
@@ -183,7 +182,6 @@ fun BoxReserva() {
                     Text(text = "Digite o seu peso")
                 },
                 leadingIcon = {
-                    // Icon composable here
                     Icon(imageVector = Icons.Default.AccessTime, contentDescription = "Data")
                 },
             )
@@ -195,15 +193,15 @@ fun BoxReserva() {
                     .width(140.dp)
                     .align(Alignment.CenterHorizontally)
                     .height(50.dp)
-                    .background(Color.DarkGray),
+                    .background(color = Color(0xFF012A4A)),
 
                 colors = ButtonDefaults.buttonColors(
                     Color.Transparent
                 ),
-                onClick = { /*TODO*/ }) {
+                onClick = {  }) {
                 Text(
                     text = "Salvar", modifier = Modifier,
-                    color = Color.White, // White text color for better contrast
+                    color = Color.White,
                     fontSize = 22.sp,
 
                     )
@@ -214,4 +212,10 @@ fun BoxReserva() {
     }
 
 
+}
+
+@Preview
+@Composable
+fun BoxReservaPreview(){
+    BoxReserva()
 }
