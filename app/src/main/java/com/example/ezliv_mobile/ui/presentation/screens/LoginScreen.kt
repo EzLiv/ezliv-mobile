@@ -50,12 +50,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val navController = rememberNavController();
-            NavHost(navController = navController, startDestination = "login") {
-                composable("login") { Login(navController) }
-                composable("mural") { MuralComponent(navController) }
-            }
+            MyApp()
         }
+    }
+}
+
+@Composable
+fun MyApp(){
+    val navController = rememberNavController();
+    NavHost(navController = navController, startDestination = "login") {
+        composable("login") { Login(navController) }
+        composable("mural") { MuralComponent(navController) }
     }
 }
 
@@ -104,11 +109,10 @@ fun EmailTextField() {
             Icon(
                 imageVector = Icons.Default.MailOutline,
                 contentDescription = "emailIcon",
-                tint = Color.White
             )
         },
         onValueChange = { email = it },
-        label = { Text(text = "Email", color = Color.White) },
+        label = { Text(text = "Email") },
         placeholder = { Text(text = "E-mail") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         modifier = Modifier
@@ -127,11 +131,10 @@ fun PasswordTextField() {
             Icon(
                 imageVector = Icons.Outlined.Lock,
                 contentDescription = "passwordLock",
-                tint = Color.White
             )
         },
         onValueChange = { senha = it },
-        label = { Text(text = "Senha", color = Color.White) },
+        label = { Text(text = "Senha") },
         placeholder = { Text(text = "Senha") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         modifier = Modifier
