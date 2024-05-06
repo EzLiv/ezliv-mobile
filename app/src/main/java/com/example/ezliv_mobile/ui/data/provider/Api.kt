@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object Api {
-    const val BASE_URL = "https://61c71fed90318500175472ff.mockapi.io/api/"
+    const val BASE_URL = "http://34.232.238.8/api/"
 
     private var authToken: String? = null
 

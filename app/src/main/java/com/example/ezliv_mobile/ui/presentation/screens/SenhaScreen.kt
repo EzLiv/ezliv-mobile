@@ -22,6 +22,7 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -55,22 +56,31 @@ class MainActivity2 : ComponentActivity() {
 
 @Composable
 fun RegisterPassword() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color(0xFF012A4A))
-    ) {
-        LogoEzliv()
-        NewPasswordTextField()
-        Spacer(modifier = Modifier.height(4.dp))
-        ConfirmPasswordTextField()
-        Spacer(modifier = Modifier.height(12.dp))
-        PasswordButton(onClick = { /*TODO*/ })
-        Spacer(modifier = Modifier.height(30.dp))
-        IconBottom()
+    var novaSenha by remember { mutableStateOf(value = "") }
+    var confirmPassword by remember { mutableStateOf(value = "") }
 
+    Scaffold {
+        Box(Modifier.padding(it)) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = Color(0xFF012A4A))
+            ) {
+                LogoEzliv()
+                NewPasswordTextField(novaSenha, onValueChange = { novaSenha = it })
+                Spacer(modifier = Modifier.height(4.dp))
+                ConfirmPasswordTextField(confirmPassword, onValueChange = { confirmPassword = it })
+                Spacer(modifier = Modifier.height(12.dp))
+                PasswordButton(onClick = { /*TODO*/ })
+                Spacer(modifier = Modifier.height(30.dp))
+                IconBottom()
+
+            }
+        }
     }
+
+
 }
 
 @Composable
@@ -88,10 +98,9 @@ fun LogoEzliv() {
     }
 
 }
-@Composable
-fun NewPasswordTextField() {
-    var novaSenha by remember { mutableStateOf(value = "") }
 
+@Composable
+fun NewPasswordTextField(novaSenha: String, onValueChange: (String) -> Unit) {
     TextField(
         value = novaSenha,
         leadingIcon = {
@@ -101,7 +110,7 @@ fun NewPasswordTextField() {
                 tint = Color.White
             )
         },
-        onValueChange = { novaSenha = it },
+        onValueChange = { onValueChange(it) },
         label = { Text(text = "Nova Senha", color = Color.White) },
         placeholder = { Text(text = "Nova Senha") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -113,10 +122,10 @@ fun NewPasswordTextField() {
 }
 
 @Composable
-fun ConfirmPasswordTextField() {
-    var senha by remember { mutableStateOf(value = "") }
+fun ConfirmPasswordTextField(confirmPassword: String, onValueChange: (String) -> Unit) {
+
     TextField(
-        value = senha,
+        value = confirmPassword,
         leadingIcon = {
             Icon(
                 imageVector = Icons.Outlined.Lock,
@@ -124,7 +133,7 @@ fun ConfirmPasswordTextField() {
                 tint = Color.White
             )
         },
-        onValueChange = { senha = it },
+        onValueChange = { onValueChange(it) },
         label = { Text(text = "Confirme a senha", color = Color.White) },
         placeholder = { Text(text = "Confirme a senha") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),

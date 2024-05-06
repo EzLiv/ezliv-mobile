@@ -22,6 +22,7 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -36,52 +37,81 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.ezliv_mobile.R
-import com.example.ezliv_mobile.ui.presentation.theme.EzlivmobileTheme
+import com.example.ezliv_mobile.ui.data.view_models.UserViewModel
+import androidx.compose.runtime.livedata.observeAsState
+import com.example.ezliv_mobile.ui.appModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApp()
+            val navController = rememberNavController();
+            NavHost(navController = navController, startDestination = "login") {
+                composable("login") {
+                    val userViewModel by inject<UserViewModel>()
+                    Login(navController, userViewModel)
+                }
+                composable("mural") { MuralComponent(navController) }
+                composable("password-change") { RegisterPassword() }
+            }
+        }
+        startKoin {
+            androidContext(this@MainActivity)
+            modules(
+                appModule,
+            )
         }
     }
 }
 
 @Composable
-fun MyApp(){
-    val navController = rememberNavController();
-    NavHost(navController = navController, startDestination = "login") {
-        composable("login") { Login(navController) }
-        composable("mural") { MuralComponent(navController) }
-    }
-}
+fun Login(navController: NavController, userViewModel: UserViewModel) {
+    var email by remember { mutableStateOf(value = "") }
+    var senha by remember { mutableStateOf(value = "") }
+    val isLoading by userViewModel.isLoading.observeAsState()
+    val isSucess by userViewModel.isSucess.observeAsState()
+    val isError by userViewModel.isError.observeAsState()
 
-@Composable
-fun Login(navController : NavController) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color(0xFF012A4A))
-    ) {
-        Logo()
-        EmailTextField()
-        Spacer(modifier = Modifier.height(4.dp))
-        PasswordTextField()
-        Spacer(modifier = Modifier.height(12.dp))
-        LoginButton(onClick = {navController.navigate("mural")})
-        Spacer(modifier = Modifier.height(30.dp))
-        ImageIconBottom()
+    Scaffold {
+        Box(Modifier.padding(it)) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = Color(0xFF012A4A))
+            ) {
+                Logo()
+                EmailTextField(email, onValueChange = { email = it })
+                Spacer(modifier = Modifier.height(4.dp))
+                PasswordTextField(senha, onValueChange = { senha = it })
+                Spacer(modifier = Modifier.height(12.dp))
+                LoginButton(onClick = {
+                    userViewModel.login(email, senha, onNavigate = {
+                        navController.navigate("password-change") {
+                            launchSingleTop = true
+                            popUpTo("login")
+                        }
+                    }
+                    )
 
+                })
+                Spacer(modifier = Modifier.height(30.dp))
+                ImageIconBottom()
+            }
+        }
     }
+
 }
 
 @Composable
@@ -97,11 +127,10 @@ fun Logo() {
             contentDescription = "Logo"
         )
     }
-
 }
+
 @Composable
-fun EmailTextField() {
-    var email by remember { mutableStateOf(value = "") }
+fun EmailTextField(email: String, onValueChange: (String) -> Unit) {
 
     TextField(
         value = email,
@@ -111,7 +140,7 @@ fun EmailTextField() {
                 contentDescription = "emailIcon",
             )
         },
-        onValueChange = { email = it },
+        onValueChange = { it -> onValueChange(it) },
         label = { Text(text = "Email") },
         placeholder = { Text(text = "E-mail") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -123,8 +152,7 @@ fun EmailTextField() {
 }
 
 @Composable
-fun PasswordTextField() {
-    var senha by remember { mutableStateOf(value = "") }
+fun PasswordTextField(senha: String, onValueChange: (String) -> Unit) {
     TextField(
         value = senha,
         leadingIcon = {
@@ -133,7 +161,7 @@ fun PasswordTextField() {
                 contentDescription = "passwordLock",
             )
         },
-        onValueChange = { senha = it },
+        onValueChange = { it -> onValueChange(it) },
         label = { Text(text = "Senha") },
         placeholder = { Text(text = "Senha") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
