@@ -46,6 +46,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ezliv_mobile.R
 import com.example.ezliv_mobile.ui.data.view_models.UserViewModel
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import com.example.ezliv_mobile.ui.app_configurations.PreferencesManager
 import com.example.ezliv_mobile.ui.app_configurations.appModule
 import com.example.ezliv_mobile.ui.data.result.LoginResult
@@ -157,6 +159,7 @@ fun EmailTextField(email: String, onValueChange: (String) -> Unit) {
 fun PasswordTextField(senha: String, onValueChange: (String) -> Unit) {
     TextField(
         value = senha,
+        visualTransformation = PasswordVisualTransformation(),
         leadingIcon = {
             Icon(
                 imageVector = Icons.Outlined.Lock,
