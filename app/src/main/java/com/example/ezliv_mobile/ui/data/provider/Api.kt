@@ -4,6 +4,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 object Api {
     const val BASE_URL = "http://34.232.238.8/api/"
@@ -15,7 +16,7 @@ object Api {
     }
 
     fun getInstance() : Retrofit {
-        val httpClient = OkHttpClient.Builder()
+        val httpClient = OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS)
 
         val interceptor = Interceptor { chain ->
             val original = chain.request()

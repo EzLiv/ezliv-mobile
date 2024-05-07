@@ -68,6 +68,7 @@ class MainActivity : ComponentActivity() {
                 composable("mural") {
                     val homeViewModel by inject<HomeViewModel>();
                     homeViewModel.getUserById()
+
                     MuralComponent(navController, homeViewModel)
                 }
                 composable("password-change") {

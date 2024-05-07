@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ezliv_mobile.ui.app_configurations.PreferencesManager
 import com.example.ezliv_mobile.ui.data.models.LoginRequest
+import com.example.ezliv_mobile.ui.data.models.NoticeModel
+import com.example.ezliv_mobile.ui.data.models.UserModel
 import com.example.ezliv_mobile.ui.data.repositories.IAuthRepository
 import com.example.ezliv_mobile.ui.data.result.GetUserResult
 import com.example.ezliv_mobile.ui.data.result.LoginResult
@@ -22,6 +24,7 @@ class HomeViewModel(private val authRepository: IAuthRepository, context: Contex
         var noticesResult = MutableLiveData<NoticesResult>(NoticesResult.Loading)
             private set
 
+
         fun getUserById() {
             viewModelScope.launch {
                 try {
@@ -34,7 +37,6 @@ class HomeViewModel(private val authRepository: IAuthRepository, context: Contex
                         preferencesManager.saveData("name", response.body()?.fullName ?: "")
                         preferencesManager.saveData("email", response.body()?.email ?: "")
                         preferencesManager.saveData("condominiumId", response.body()?.condominiumId ?: "")
-                        getNotices()
                     } else {
                         throw Exception("Erro ao fazer login")
                     }
@@ -51,9 +53,9 @@ class HomeViewModel(private val authRepository: IAuthRepository, context: Contex
                     val condominiumId = preferencesManager.getData("condominiumId", "")
                     val response = authRepository.getNotices(condominiumId)
                     if (response.isSuccessful) {
-                        noticesResult.value = NoticesResult.Success(response.body()!!)
+                        noticesResult.value =  NoticesResult.Success(response.body() ?: emptyList())
                     } else {
-                        throw Exception("Erro ao fazer login")
+                        throw Exception("Erro ao fazer get notices")
                     }
                 } catch (e: Exception) {
                     noticesResult.value = NoticesResult.Error(e.message ?: "")

@@ -21,10 +21,6 @@ class UserViewModel(private val authRepository: IAuthRepository, context: Contex
     var result = MutableLiveData<LoginResult>(LoginResult.Loading)
         private set
 
-
-    var changePasswordSucess = MutableLiveData(false)
-        private set
-
     private val preferencesManager = PreferencesManager(context)
     fun login(email: String, password: String, navController : NavController) {
         viewModelScope.launch {

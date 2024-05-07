@@ -29,6 +29,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,70 +68,111 @@ fun MuralComponent(
     navController: NavController,
     homeViewModel: HomeViewModel
 ) {
-    val result = homeViewModel.result.observeAsState()
+    val result by homeViewModel.result.observeAsState()
 
-    val userName = result.value?.let {
-        when (it) {
-            is GetUserResult.Success -> it.user.fullName
-            else -> ""
+    val noticesResult by homeViewModel.noticesResult.observeAsState()
+
+    var fullName = ""
+
+    when (result) {
+        is GetUserResult.Loading -> {
+            Box(modifier = Modifier.fillMaxSize()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.White),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Carregando...",
+                        style = TextStyle(color = Color.Black),
+                        fontSize = 16.sp
+                    )
+                }
+            }
         }
-    } ?: ""
 
-    val noticesResult = homeViewModel.noticesResult.observeAsState()
-    Scaffold(topBar = {
-        when(result.value) {
-            is GetUserResult.Loading -> {
-                Box{};
-            }
-            is GetUserResult.Error -> {
-                Box{};
-            }
-            else -> {
-                Cabecalho(userName, onClickExit = {
+        is GetUserResult.Error -> {
+            navController.popBackStack("login", inclusive = false)
+        }
+        else -> {
+            fullName = (result as GetUserResult.Success).user.fullName
+            homeViewModel.getNotices()
+            Scaffold(topBar = {
+                Cabecalho(fullName, onClickExit = {
                     homeViewModel.logout()
                     navController.popBackStack("login", inclusive = false)
                 })
-            }
-        }
-    },
-        bottomBar = {
-            Rodape()
-        }
-    ) {
-        when (noticesResult.value) {
-            is NoticesResult.Loading -> {
-                Box(modifier = Modifier.padding(it));
-            }
-
-            is NoticesResult.Error -> {
-                Box(modifier = Modifier.padding(it));
-            }
-            else -> {
-                val notices = (noticesResult.value as NoticesResult.Success).data
-                Box(modifier = Modifier.padding(it)) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.White),
-                    ) {
-                        LazyColumn(
-                            modifier = Modifier.padding(10.dp),
-                            verticalArrangement = Arrangement.spacedBy(10.dp)
-                        ) {
-                            items(notices.size) { index ->
-                                Aviso(
-                                    title = notices[index].title,
-                                    description = notices[index].description,
-                                    createdAt = notices[index].createdAt,
-                                    name = notices[index].condominiumName,
+            },
+                bottomBar = {
+                    Rodape()
+                }
+            ) {
+                when (noticesResult) {
+                    is NoticesResult.Loading -> {
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(Color.White),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "Carregando...",
+                                    style = TextStyle(color = Color.Black),
+                                    fontSize = 16.sp
+                                )
+                            }
+                        }
+                    }
+                    is NoticesResult.Error -> {
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(Color.White),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "Erro ao carregar avisos",
+                                    style = TextStyle(color = Color.Black),
+                                    fontSize = 16.sp
                                 )
                             }
                         }
                     }
 
+                    else -> {
+                        val notices = (noticesResult as NoticesResult.Success).data
+                        Box(modifier = Modifier.padding(it)) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(Color.White),
+                            ) {
+                                LazyColumn(
+                                    modifier = Modifier.padding(10.dp),
+                                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                                ) {
+                                    items(notices.size) { index ->
+                                        Aviso(
+                                            title = notices[index].title,
+                                            description = notices[index].description,
+                                            createdAt = notices[index].createdAt,
+                                            name = notices[index].condominiumName,
+                                        )
+                                    }
+                                }
+
+
+                            }
+                        }
+                    }
                 }
             }
-
         }
     }
 
