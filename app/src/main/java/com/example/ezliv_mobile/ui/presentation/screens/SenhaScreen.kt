@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -40,7 +41,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.ezliv_mobile.R
+import com.example.ezliv_mobile.ui.data.result.LoginResult
+import com.example.ezliv_mobile.ui.data.view_models.UserViewModel
 import com.example.ezliv_mobile.ui.presentation.theme.EzlivmobileTheme
 
 class MainActivity2 : ComponentActivity() {
@@ -55,9 +59,10 @@ class MainActivity2 : ComponentActivity() {
 }
 
 @Composable
-fun RegisterPassword() {
+fun RegisterPassword(navController: NavController, userViewModel: UserViewModel) {
     var novaSenha by remember { mutableStateOf(value = "") }
     var confirmPassword by remember { mutableStateOf(value = "") }
+    val result by userViewModel.result.observeAsState()
 
     Scaffold {
         Box(Modifier.padding(it)) {
@@ -72,7 +77,12 @@ fun RegisterPassword() {
                 Spacer(modifier = Modifier.height(4.dp))
                 ConfirmPasswordTextField(confirmPassword, onValueChange = { confirmPassword = it })
                 Spacer(modifier = Modifier.height(12.dp))
-                PasswordButton(onClick = { /*TODO*/ })
+                PasswordButton(onClick = { userViewModel.newPassword(novaSenha, onNavigate = {
+                    val boolean = (result as LoginResult.SuccessChangePassword).success
+                    if(boolean){
+                        navController.navigate("login")
+                    }
+                })})
                 Spacer(modifier = Modifier.height(30.dp))
                 IconBottom()
 
@@ -173,13 +183,5 @@ fun IconBottom() {
                 .fillMaxSize()
                 .align(Alignment.BottomEnd)
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun RegisterPasswordPreview() {
-    EzlivmobileTheme {
-        RegisterPassword()
     }
 }

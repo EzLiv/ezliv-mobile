@@ -39,7 +39,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -47,7 +46,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ezliv_mobile.R
 import com.example.ezliv_mobile.ui.data.view_models.UserViewModel
 import androidx.compose.runtime.livedata.observeAsState
-import com.example.ezliv_mobile.ui.appModule
+import com.example.ezliv_mobile.ui.app_configurations.PreferencesManager
+import com.example.ezliv_mobile.ui.app_configurations.appModule
+import com.example.ezliv_mobile.ui.data.result.LoginResult
+import com.example.ezliv_mobile.ui.data.view_models.HomeViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.android.ext.android.inject
@@ -57,13 +59,22 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController();
+
             NavHost(navController = navController, startDestination = "login") {
                 composable("login") {
-                    val userViewModel by inject<UserViewModel>()
+                    val userViewModel by inject<UserViewModel>();
                     Login(navController, userViewModel)
                 }
-                composable("mural") { MuralComponent(navController) }
-                composable("password-change") { RegisterPassword() }
+                composable("mural") {
+                    val homeViewModel by inject<HomeViewModel>();
+                    homeViewModel.getUserById()
+                    homeViewModel.getNotices()
+                    MuralComponent(navController, homeViewModel)
+                }
+                composable("password-change") {
+                    val userViewModel by inject<UserViewModel>();
+                    RegisterPassword(navController, userViewModel)
+                }
             }
         }
         startKoin {
@@ -79,9 +90,7 @@ class MainActivity : ComponentActivity() {
 fun Login(navController: NavController, userViewModel: UserViewModel) {
     var email by remember { mutableStateOf(value = "") }
     var senha by remember { mutableStateOf(value = "") }
-    val isLoading by userViewModel.isLoading.observeAsState()
-    val isSucess by userViewModel.isSucess.observeAsState()
-    val isError by userViewModel.isError.observeAsState()
+    val result by userViewModel.result.observeAsState()
 
     Scaffold {
         Box(Modifier.padding(it)) {
@@ -97,13 +106,7 @@ fun Login(navController: NavController, userViewModel: UserViewModel) {
                 PasswordTextField(senha, onValueChange = { senha = it })
                 Spacer(modifier = Modifier.height(12.dp))
                 LoginButton(onClick = {
-                    userViewModel.login(email, senha, onNavigate = {
-                        navController.navigate("password-change") {
-                            launchSingleTop = true
-                            popUpTo("login")
-                        }
-                    }
-                    )
+                    userViewModel.login(email, senha, navController = navController)
 
                 })
                 Spacer(modifier = Modifier.height(30.dp))
