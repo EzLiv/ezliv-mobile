@@ -78,10 +78,20 @@ fun MuralComponent(
 
     val noticesResult = homeViewModel.noticesResult.observeAsState()
     Scaffold(topBar = {
-        Cabecalho(userName, onClickExit = {
-            homeViewModel.logout()
-            navController.popBackStack("login", inclusive = false)
-        })
+        when(result.value) {
+            is GetUserResult.Loading -> {
+                Box{};
+            }
+            is GetUserResult.Error -> {
+                Box{};
+            }
+            else -> {
+                Cabecalho(userName, onClickExit = {
+                    homeViewModel.logout()
+                    navController.popBackStack("login", inclusive = false)
+                })
+            }
+        }
     },
         bottomBar = {
             Rodape()

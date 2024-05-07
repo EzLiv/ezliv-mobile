@@ -68,7 +68,6 @@ class MainActivity : ComponentActivity() {
                 composable("mural") {
                     val homeViewModel by inject<HomeViewModel>();
                     homeViewModel.getUserById()
-                    homeViewModel.getNotices()
                     MuralComponent(navController, homeViewModel)
                 }
                 composable("password-change") {
@@ -107,7 +106,6 @@ fun Login(navController: NavController, userViewModel: UserViewModel) {
                 Spacer(modifier = Modifier.height(12.dp))
                 LoginButton(onClick = {
                     userViewModel.login(email, senha, navController = navController)
-
                 })
                 Spacer(modifier = Modifier.height(30.dp))
                 ImageIconBottom()

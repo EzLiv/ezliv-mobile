@@ -34,6 +34,7 @@ class HomeViewModel(private val authRepository: IAuthRepository, context: Contex
                         preferencesManager.saveData("name", response.body()?.fullName ?: "")
                         preferencesManager.saveData("email", response.body()?.email ?: "")
                         preferencesManager.saveData("condominiumId", response.body()?.condominiumId ?: "")
+                        getNotices()
                     } else {
                         throw Exception("Erro ao fazer login")
                     }
@@ -46,7 +47,7 @@ class HomeViewModel(private val authRepository: IAuthRepository, context: Contex
         fun getNotices(){
             viewModelScope.launch {
                 try {
-                    result.value = GetUserResult.Loading
+                    noticesResult.value = NoticesResult.Loading
                     val condominiumId = preferencesManager.getData("condominiumId", "")
                     val response = authRepository.getNotices(condominiumId)
                     if (response.isSuccessful) {
@@ -55,7 +56,7 @@ class HomeViewModel(private val authRepository: IAuthRepository, context: Contex
                         throw Exception("Erro ao fazer login")
                     }
                 } catch (e: Exception) {
-                    result.value = GetUserResult.Error(e.message ?: "")
+                    noticesResult.value = NoticesResult.Error(e.message ?: "")
                 }
             }
         }
