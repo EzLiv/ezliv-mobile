@@ -16,8 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun Header (){
@@ -30,7 +32,7 @@ fun Header (){
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = Color.Red)
+                .background(color = Color(0xFF012A4A))
                 .height(58.dp)
                 .padding(10.dp),
             Arrangement.Absolute.Left,
@@ -38,22 +40,29 @@ fun Header (){
         ){
             Icon(
                 imageVector = Icons.Default.ArrowBack,
-                contentDescription = "back"
+                contentDescription = "back",
+                tint = Color.White
 
             )
-            Text(text = "Apartamento")
+            Text(text = "Apartamento",
+                fontWeight = FontWeight.Bold,
+                fontSize = 23.sp,
+                color = Color.White)
         }
         Row (
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = Color.Green)
+                .background(color = Color(0xFF012A4A))
                 .height(48.dp),
             Arrangement.SpaceAround,
             Alignment.CenterVertically
 
         ){
-            Text(text = "Nova Reserva")
-            Text(text = "Minhas Reservas")
+            Text(text = "Nova Reserva",
+                color = Color.White
+            )
+            Text(text = "Minhas Reservas",
+                color = Color.White)
         }
     }
 }
