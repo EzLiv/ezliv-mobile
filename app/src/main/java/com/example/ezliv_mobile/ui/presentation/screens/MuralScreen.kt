@@ -77,34 +77,36 @@ fun MuralComponent(
     } ?: ""
 
     val noticesResult = homeViewModel.noticesResult.observeAsState()
-    when (noticesResult.value) {
-        is NoticesResult.Loading -> {
-            return;
+    Scaffold(topBar = {
+        Cabecalho(userName, onClickExit = {
+            homeViewModel.logout()
+            navController.popBackStack("login", inclusive = false)
+        })
+    },
+        bottomBar = {
+            Rodape()
         }
+    ) {
+        when (noticesResult.value) {
+            is NoticesResult.Loading -> {
+                Box(modifier = Modifier.padding(it));
+            }
 
-        is NoticesResult.Error -> {
-            return;
-        }
-
-        else -> {
-            val notices = (noticesResult.value as NoticesResult.Success).data
-            Scaffold(topBar = {
-                Cabecalho(userName, onClickExit = {
-                    homeViewModel.logout()
-                    navController.popBackStack("login", inclusive = false)
-                })
-            },
-                bottomBar = {
-                    Rodape()
-                }
-            ) {
+            is NoticesResult.Error -> {
+                Box(modifier = Modifier.padding(it));
+            }
+            else -> {
+                val notices = (noticesResult.value as NoticesResult.Success).data
                 Box(modifier = Modifier.padding(it)) {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
                             .background(Color.White),
                     ) {
-                        LazyColumn(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        LazyColumn(
+                            modifier = Modifier.padding(10.dp),
+                            verticalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
                             items(notices.size) { index ->
                                 Aviso(
                                     title = notices[index].title,
@@ -115,10 +117,11 @@ fun MuralComponent(
                             }
                         }
                     }
+
                 }
             }
-        }
 
+        }
     }
 
 
