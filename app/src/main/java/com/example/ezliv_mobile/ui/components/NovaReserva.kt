@@ -17,9 +17,15 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,12 +41,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BoxReserva() {
 
     Box(modifier = Modifier
         .background(color = Color(0xFFD9D9D9))
-        .height(455.dp)
+        .height(465.dp)
         .width(360.dp)
         .clip(shape = RoundedCornerShape(12.dp))) {
         Column(
@@ -79,36 +86,69 @@ fun BoxReserva() {
                 textAlign = TextAlign.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 29.dp)
+                    .padding(start = 45.dp)
             )
-            OutlinedTextField(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(7.dp))
-                    .background(color = Color(0xFFCDCBCB))
-                    .height(55.dp)
-                    .width(310.dp)
 
-                    .align(Alignment.CenterHorizontally),
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = "Aréa",
-                        modifier = Modifier.size(50.dp)
+            var isExpanded by remember { mutableStateOf(false) }
+            var gender by remember { mutableStateOf("") }
+
+            Box(
+                modifier = Modifier
+                    .padding(start = 9.dp)
+            ) {
+                ExposedDropdownMenuBox(
+                    expanded = isExpanded,
+                    onExpandedChange = { isExpanded = it }
+                ) {
+                    TextField(
+                        value = gender,
+                        onValueChange = { /* Aqui você pode adicionar a lógica para alterar o valor */ },
+                        readOnly = true,
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
+                        },
+                        colors = ExposedDropdownMenuDefaults.textFieldColors(Color.Transparent),
+                        modifier = Modifier
+                            .menuAnchor()
+                            .clip(RoundedCornerShape(7.dp))
+                            .height(60.dp)
+                            .width(310.dp)
+                            .align(Alignment.Center)
+                            .padding(start = 29.dp)
+
                     )
 
-                },
-                value = area,
+                    DropdownMenu(
+                        expanded = isExpanded,
+                        onDismissRequest = { isExpanded = false },
+                        modifier = Modifier.fillMaxWidth(),
 
-                onValueChange = {
-                    area = it
-                },
-                label = {
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text(text = "Area") },
+                            onClick = {
+                                gender = " Area"
+                                isExpanded = false
+                            }
+                        )
 
-                },
-                placeholder = {
+                        DropdownMenuItem(
+                            text = { Text(text = "Salão de festas - Torre Norte") },
+                            onClick = {
+                                gender = " Salão de festas - Torre Norte"
+                                isExpanded = false
 
+
+                            })
+                        DropdownMenuItem(
+                            text = { Text(text = "Salão de festas - Torre Sul") },
+                            onClick = {
+                                gender = " Salão de festas - Torre Sul"
+                                isExpanded = false
+                            })
+                    }
                 }
-            )
+            }
 
 
             var data by remember {
@@ -124,28 +164,68 @@ fun BoxReserva() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 10.dp)
-                    .padding(start = 29.dp)
+                    .padding(start = 45.dp)
             )
-            OutlinedTextField(
+            var isExpandedData by remember { mutableStateOf(false) }
+            var genderData by remember { mutableStateOf("") }
+
+            Box(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(7.dp))
-                    .height(55.dp)
-                    .width(310.dp)
-                    .background(color = Color(0xFFCDCBCB))
-                    .align(Alignment.CenterHorizontally),
-                value = data,
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.DateRange, contentDescription = "Data")
-                },
-                onValueChange = {
-                    data = it
-                },
-                label = {
+                    .padding(start = 9.dp)
+            ) {
+                ExposedDropdownMenuBox(
+                    expanded = isExpandedData,
+                    onExpandedChange = { isExpandedData = it }
+                ) {
+                    TextField(
+                        value = genderData,
+                        onValueChange = { /* Aqui você pode adicionar a lógica para alterar o valor */ },
+                        readOnly = true,
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpandedData)
+                        },
+                        colors = ExposedDropdownMenuDefaults.textFieldColors(Color.Transparent),
+                        modifier = Modifier
+                            .menuAnchor()
+                            .clip(RoundedCornerShape(7.dp))
+                            .height(60.dp)
+                            .width(310.dp)
+                            .align(Alignment.Center)
+                            .padding(start = 29.dp)
 
-                },
-                placeholder = {
+                    )
 
-                })
+                    DropdownMenu(
+                        expanded = isExpandedData,
+                        onDismissRequest = { isExpandedData = false },
+                        modifier = Modifier.fillMaxWidth(),
+
+                        ) {
+                        DropdownMenuItem(
+                            text = { Text(text = "Data") },
+                            onClick = {
+                                genderData = "Data"
+                                isExpandedData = false
+                            }
+                        )
+
+                        DropdownMenuItem(
+                            text = { Text(text = "05/05/2024") },
+                            onClick = {
+                                genderData = "05/05/2024"
+                                isExpandedData = false
+
+
+                            })
+                        DropdownMenuItem(
+                            text = { Text(text = "13/05/2024") },
+                            onClick = {
+                                genderData = "13/05/2024"
+                                isExpandedData = false
+                            })
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.width(16.dp))
             var hora by remember {
@@ -161,30 +241,70 @@ fun BoxReserva() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 10.dp)
-                    .padding(start = 29.dp)
+                    .padding(start = 45.dp)
 
             )
-            OutlinedTextField(
+            var isExpandedHora by remember { mutableStateOf(false) }
+            var genderHora by remember { mutableStateOf("") }
+
+            Box(
                 modifier = Modifier
-                    .height(55.dp)
-                    .clip(RoundedCornerShape(7.dp))
-                    .width(310.dp)
-                    .background(color = Color(0xFFCDCBCB))
-                    .align(Alignment.CenterHorizontally),
-                value = hora,
-                onValueChange = {
-                    hora = it
-                },
-                label = {
-                    Text("")
-                },
-                placeholder = {
-                    Text(text = "Digite o seu peso")
-                },
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.AccessTime, contentDescription = "Data")
-                },
-            )
+                    .padding(start = 9.dp)
+            ) {
+                ExposedDropdownMenuBox(
+                    expanded = isExpandedHora,
+                    onExpandedChange = { isExpandedHora = it }
+                ) {
+                    TextField(
+                        value = genderHora,
+                        onValueChange = {  },
+                        readOnly = true,
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpandedHora)
+                        },
+                        colors = ExposedDropdownMenuDefaults.textFieldColors(Color.Transparent),
+                        modifier = Modifier
+                            .menuAnchor()
+                            .clip(RoundedCornerShape(7.dp))
+                            .height(60.dp)
+                            .width(310.dp)
+                            .align(Alignment.Center)
+                            .padding(start = 29.dp)
+
+                    )
+
+                    DropdownMenu(
+                        expanded = isExpandedHora,
+                        onDismissRequest = { isExpandedHora = false },
+                        modifier = Modifier.fillMaxWidth(),
+
+                        ) {
+                        DropdownMenuItem(
+                            text = { Text(text = "Hora") },
+                            onClick = {
+                                genderHora = "Hora"
+                                isExpandedHora = false
+                            }
+                        )
+
+                        DropdownMenuItem(
+                            text = { Text(text = "10:00 - 14:00") },
+                            onClick = {
+                                genderHora = "10:00 - 14:00"
+                                isExpandedHora = false
+
+
+                            })
+                        DropdownMenuItem(
+                            text = { Text(text = "19:30 - 21:30") },
+                            onClick = {
+                                genderHora = "19:30 - 21:30"
+                                isExpandedHora = false
+                            })
+                    }
+                }
+            }
+
             Spacer(modifier = Modifier.height(20.dp))
 
             Button(
