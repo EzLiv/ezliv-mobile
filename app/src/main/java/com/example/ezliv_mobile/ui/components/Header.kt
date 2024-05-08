@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun Header (){
+fun Header (titulo: String, text1: String, text2: String){
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -44,7 +44,7 @@ fun Header (){
                 tint = Color.White
 
             )
-            Text(text = "Apartamento",
+            Text(text = titulo,
                 fontWeight = FontWeight.Bold,
                 fontSize = 23.sp,
                 color = Color.White)
@@ -58,10 +58,10 @@ fun Header (){
             Alignment.CenterVertically
 
         ){
-            Text(text = "Nova Reserva",
+            Text(text = text1,
                 color = Color.White
             )
-            Text(text = "Minhas Reservas",
+            Text(text = text2,
                 color = Color.White)
         }
     }
@@ -70,5 +70,5 @@ fun Header (){
 @Preview
 @Composable
 fun HeaderPreview() {
-    Header()
+    Header("exemplo", "exemplo", "exemplo")
 }
