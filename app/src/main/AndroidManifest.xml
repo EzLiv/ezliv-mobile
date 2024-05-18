@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,19 +12,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Ezlivmobile"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ui.screens.Mural"
+            android:name=".ui.presentation.home.Mural"
             android:exported="false"
             android:label="@string/title_activity_mural"
             android:theme="@style/Theme.Ezlivmobile" />
         <activity
-            android:name=".ui.screens.MainActivity2"
+            android:name=".ui.presentation.auth.MainActivity2"
             android:exported="false"
             android:label="@string/title_activity_main2"
             android:theme="@style/Theme.Ezlivmobile" />
         <activity
-            android:name=".ui.screens.MainActivity"
+            android:name=".ui.presentation.auth.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Ezlivmobile">
