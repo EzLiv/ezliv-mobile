@@ -1,4 +1,4 @@
-package com.example.ezliv_mobile.ui.presentation.visitantes.components
+package com.example.ezliv_mobile.ui.presentation.apartamento.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
