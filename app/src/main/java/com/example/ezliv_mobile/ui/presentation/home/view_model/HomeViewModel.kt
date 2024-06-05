@@ -35,6 +35,7 @@ class HomeViewModel(private val homeRepository: IHomeRepository, context: Contex
                         preferencesManager.saveData("email", response.body()?.email ?: "")
                         preferencesManager.saveData("condominiumId", response.body()?.condominiumId ?: "")
                         preferencesManager.saveData("apartmentId", response.body()?.apartmentId ?: "")
+
                     } else {
                         throw Exception("Erro ao fazer login")
                     }

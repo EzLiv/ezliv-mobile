@@ -41,6 +41,7 @@ import com.example.ezliv_mobile.ui.presentation.home.results.GetUserResult
 import com.example.ezliv_mobile.ui.presentation.home.results.NoticesResult
 import com.example.ezliv_mobile.ui.presentation.home.view_model.HomeViewModel
 import com.example.ezliv_mobile.ui.presentation.home.components.Aviso
+import com.example.ezliv_mobile.ui.presentation.ui.components.AppBar
 import com.example.ezliv_mobile.ui.presentation.ui.theme.EzlivmobileTheme
 
 class Mural : ComponentActivity() {
@@ -103,7 +104,7 @@ fun MuralComponent(
                 })
             },
                 bottomBar = {
-                    Rodape()
+                    AppBar(navController)
                 }
             ) {
                 when (noticesResult) {
