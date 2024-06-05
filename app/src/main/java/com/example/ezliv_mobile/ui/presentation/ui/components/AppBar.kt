@@ -1,6 +1,7 @@
 package com.example.ezliv_mobile.ui.presentation.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,10 +21,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
 fun AppBar(
-
+navController: NavController
 //    routes: List<Route>,
 //    onItemClicked: (Route) -> Unit
 ) {
@@ -37,7 +39,7 @@ fun AppBar(
         Icon(imageVector = Icons.Filled.Home, contentDescription = "Inicio  " ,tint = Color.White)
             Text(text = "Inicio",color = Color.White, fontWeight = FontWeight.Bold)
         }
-        Column (horizontalAlignment = Alignment.CenterHorizontally) {
+        Column (modifier = Modifier.clickable { navController.navigate("entregas") },horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(imageVector = Icons.Filled.Email, contentDescription = "Entregas" , tint = Color.White)
             Text(text = "Entregas",color = Color.White, fontWeight = FontWeight.Bold)
         }
@@ -53,8 +55,3 @@ fun AppBar(
     }
 }
 
-@Preview
-@Composable
-fun AppBarPreview() {
-    AppBar()
-}
