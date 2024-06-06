@@ -16,4 +16,4 @@ data class MoradorModel(
     val condominiumName: String
     )
 
-//vai dar bigode no date voltar aqui//
+

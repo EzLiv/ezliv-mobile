@@ -1,8 +1,6 @@
 package com.example.ezliv_mobile.ui.data.morador.remote
 
-import com.example.ezliv_mobile.ui.data.home.remote.HomeService
 import com.example.ezliv_mobile.ui.data.provider.Api
-import com.example.ezliv_mobile.ui.domain.home.models.UserModel
 import com.example.ezliv_mobile.ui.domain.morador.models.MoradorModel
 import com.example.ezliv_mobile.ui.domain.morador.repositories.IMoradorRepository
 import retrofit2.Response
@@ -16,7 +14,7 @@ class MoradorRepository : IMoradorRepository {
         apartmentId: String,
         condominiumId: String
     ): Response<List<MoradorModel>> {
-        return api.getAllResidentsById(apartmentId, condominiumId)
+        return api.getAllResidentsById(apartmentId)
     }
 
     override suspend fun getApartmentById(id: String): Response<MoradorModel> {

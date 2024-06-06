@@ -69,5 +69,5 @@ fun Header (titulo: String, text1: String, text2: String){
 @Preview
 @Composable
 fun HeaderPreview() {
-    Header("exemplo", "exemplo", "exemplo")
+    Header("Moradores", "exemplo", "exemplo")
 }
