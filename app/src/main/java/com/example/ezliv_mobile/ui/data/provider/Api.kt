@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object Api {
-    const val BASE_URL = "http://34.232.238.8/api/"
+    const val BASE_URL = "https://ezliv.zapto.org/api/"
 
     private var authToken: String? = null
 
