@@ -1,7 +1,8 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.ezliv_mobile.ui.presentation.apartamento.components
+package com.example.ezliv_mobile.ui.components
 
+import android.provider.CalendarContract.Colors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,18 +12,27 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DatePickerFormatter
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,7 +49,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BoxVisitante() {
     Box(modifier = Modifier
@@ -87,7 +96,7 @@ fun BoxVisitante() {
                     .fillMaxWidth()
                     .padding(start = 29.dp)
             )
-            OutlinedTextField(
+            TextField(
                 modifier = Modifier
                     .clip(RoundedCornerShape(7.dp))
                     .background(Color.White)
@@ -97,7 +106,10 @@ fun BoxVisitante() {
                     .align(Alignment.CenterHorizontally),
 
                 value = nome,
-
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color(0xfffffff),
+                    focusedContainerColor = Color.White
+                ),
                 onValueChange = {
                     nome = it
                 },
@@ -125,13 +137,18 @@ fun BoxVisitante() {
                     .padding(top = 10.dp)
                     .padding(start = 29.dp)
             )
-            OutlinedTextField(
+            TextField(
                 modifier = Modifier
                     .clip(RoundedCornerShape(7.dp))
                     .height(55.dp)
                     .width(310.dp)
                     .background(Color.White)
                     .align(Alignment.CenterHorizontally),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White
+                ),
+
                 value = email,
 
                 onValueChange = {
@@ -161,13 +178,18 @@ fun BoxVisitante() {
                     .padding(start = 29.dp)
 
             )
-            OutlinedTextField(
+            TextField(
                 modifier = Modifier
                     .height(55.dp)
                     .clip(RoundedCornerShape(7.dp))
                     .width(310.dp)
                     .background(Color.White)
                     .align(Alignment.CenterHorizontally),
+
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color(0xfffffff),
+                    focusedContainerColor = Color.White
+                ),
                 value = cpf,
                 onValueChange = {
                     cpf = it
@@ -178,7 +200,7 @@ fun BoxVisitante() {
                 placeholder = {
                     Text(text = "")
                 },
-               )
+            )
 
 
             var sexo by remember {
@@ -201,8 +223,9 @@ fun BoxVisitante() {
 
             Box(
                 modifier = Modifier
-                    .padding(start = 9.dp)
+                    .padding(start = 3.dp)
                     .align(Alignment.CenterHorizontally)
+
             ) {
                 ExposedDropdownMenuBox(
                     expanded = isExpandedSexo,
@@ -210,12 +233,15 @@ fun BoxVisitante() {
                 ) {
                     TextField(
                         value = genderSexo,
-                        onValueChange = { /* Aqui você pode adicionar a lógica para alterar o valor */ },
+                        onValueChange = {  },
                         readOnly = true,
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpandedSexo)
                         },
-                        colors = ExposedDropdownMenuDefaults.textFieldColors(Color.Transparent),
+                        colors = ExposedDropdownMenuDefaults.textFieldColors(
+                            unfocusedContainerColor = Color.White,
+                            focusedContainerColor = Color.White
+                        ),
                         modifier = Modifier
                             .menuAnchor()
                             .clip(RoundedCornerShape(7.dp))
@@ -263,178 +289,184 @@ fun BoxVisitante() {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-           Row(modifier = Modifier
-               .height(120.dp)
-               .fillMaxWidth()
-           ) {
+            Row(modifier = Modifier
+                .height(120.dp)
+                .fillMaxWidth()
+            ) {
 
-               Column {
-                   var sexo by remember {
-                       mutableStateOf("")
-                   }
+                Column {
+                    var dataInicio by remember {
+                        mutableStateOf("")
+                    }
 
-                   Text(
-                       text = "Liberar Visitante de:",
-                       fontWeight = FontWeight.Bold,
-                       fontSize = 14.sp,
-                       color = Color(0xFF012A4A),
-                       textAlign = TextAlign.Start,
-                       modifier = Modifier
+                    Text(
+                        text = "Liberar Visitante de:",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp,
+                        color = Color(0xFF012A4A),
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
 
-                           .padding(top = 10.dp)
-                           .padding(start = 33.dp, bottom = 4.dp)
-                   )
-                   var isExpandedDataInicio by remember { mutableStateOf(false) }
-                   var genderDataInicio by remember { mutableStateOf("") }
+                            .padding(top = 10.dp)
+                            .padding(start = 33.dp, bottom = 4.dp)
+                    )
+                    var isExpandedDataInicio by remember { mutableStateOf(false) }
+                    var genderDataInicio by remember { mutableStateOf("") }
 
-                   Box(
-                       modifier = Modifier
-                           .padding(start = 9.dp)
+                    Box(
+                        modifier = Modifier
+                            .padding(start = 9.dp)
 
-                   ) {
-                       ExposedDropdownMenuBox(
-                           expanded = isExpandedDataInicio,
-                           onExpandedChange = { isExpandedDataInicio = it }
-                       ) {
-                           TextField(
-                               value = genderDataInicio,
-                               onValueChange = { /* Aqui você pode adicionar a lógica para alterar o valor */ },
-                               readOnly = true,
-                               trailingIcon = {
-                                   ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpandedSexo)
-                               },
-                               colors = ExposedDropdownMenuDefaults.textFieldColors(Color.Transparent),
-                               modifier = Modifier
-                                   .menuAnchor()
-                                   .clip(RoundedCornerShape(7.dp))
-                                   .height(55.dp)
-                                   .width(170.dp)
-                                   .padding(start = 23.dp)
+                    ) {
+                        ExposedDropdownMenuBox(
+                            expanded = isExpandedDataInicio,
+                            onExpandedChange = { isExpandedDataInicio = it }
+                        ) {
+                            TextField(
+                                value = genderDataInicio,
+                                onValueChange = {  },
+                                readOnly = true,
+                                trailingIcon = {
+                                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpandedSexo)
+                                },
+                                colors = ExposedDropdownMenuDefaults.textFieldColors(
+                                    unfocusedContainerColor = Color.White,
+                                    focusedContainerColor = Color.White
+                                ),
+                                modifier = Modifier
+                                    .menuAnchor()
+                                    .clip(RoundedCornerShape(7.dp))
+                                    .height(55.dp)
+                                    .width(170.dp)
+                                    .padding(start = 23.dp)
 
-                                   .background(Color.White)
-                                   .align(Alignment.Center)
-
-
-
-                           )
-
-                           DropdownMenu(
-                               expanded = isExpandedDataInicio,
-                               onDismissRequest = { isExpandedDataInicio= false },
-                               modifier = Modifier.fillMaxWidth(),
-
-                               ) {
-                               DropdownMenuItem(
-                                   text = { Text(text = " dia 1:") },
-                                   onClick = {
-                                       genderDataInicio = ""
-                                       genderDataInicio = "dia 1"
-                                       isExpandedDataInicio = false
-                                   }
-                               )
-
-                               DropdownMenuItem(
-                                   text = { Text(text = "Masculino") },
-                                   onClick = {
-                                       genderDataInicio = "Masculino"
-                                       isExpandedDataInicio = false
-
-
-                                   })
-                               DropdownMenuItem(
-                                   text = { Text(text = "Feminino") },
-                                   onClick = {
-                                       genderDataInicio = "Feminino"
-                                       isExpandedDataInicio = false
-                                   })
-                           }
-                       }
-                   }
-               }
-               Column {
-                   var sexo by remember {
-                       mutableStateOf("")
-                   }
-
-                   Text(
-                       text = "Até",
-                       fontWeight = FontWeight.Bold,
-                       fontSize = 14.sp,
-                       color = Color(0xFF012A4A),
-                       textAlign = TextAlign.Start,
-                       modifier = Modifier
-
-                           .padding(top = 10.dp)
-                           .padding(start = 33.dp, bottom = 4.dp)
-                   )
-                   var isExpandedDataInicio by remember { mutableStateOf(false) }
-                   var genderDataInicio by remember { mutableStateOf("") }
-
-                   Box(
-                       modifier = Modifier
-                           .padding(start = 9.dp)
-
-                   ) {
-                       ExposedDropdownMenuBox(
-                           expanded = isExpandedDataInicio,
-                           onExpandedChange = { isExpandedDataInicio = it }
-                       ) {
-                           TextField(
-                               value = genderDataInicio,
-                               onValueChange = { /* Aqui você pode adicionar a lógica para alterar o valor */ },
-                               readOnly = true,
-                               trailingIcon = {
-                                   ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpandedSexo)
-                               },
-                               colors = ExposedDropdownMenuDefaults.textFieldColors(Color.Transparent),
-                               modifier = Modifier
-                                   .menuAnchor()
-                                   .clip(RoundedCornerShape(7.dp))
-                                   .height(55.dp)
-                                   .width(170.dp)
-                                   .padding(start = 7.dp, end = 24.dp)
-
-                                   .background(Color.White)
-                                   .align(Alignment.Center)
+                                    .background(Color.White)
+                                    .align(Alignment.Center)
 
 
 
-                           )
+                            )
 
-                           DropdownMenu(
-                               expanded = isExpandedDataInicio,
-                               onDismissRequest = { isExpandedDataInicio= false },
-                               modifier = Modifier.fillMaxWidth(),
+                            DropdownMenu(
+                                expanded = isExpandedDataInicio,
+                                onDismissRequest = { isExpandedDataInicio= false },
+                                modifier = Modifier.fillMaxWidth(),
 
-                               ) {
-                               DropdownMenuItem(
-                                   text = { Text(text = " dia 1:") },
-                                   onClick = {
-                                       genderDataInicio = ""
-                                       genderDataInicio = "dia 1"
-                                       isExpandedDataInicio = false
-                                   }
-                               )
+                                ) {
+                                DropdownMenuItem(
+                                    text = { Text(text = " dia 1:") },
+                                    onClick = {
+                                        genderDataInicio = ""
+                                        genderDataInicio = "dia 1"
+                                        isExpandedDataInicio = false
+                                    }
+                                )
 
-                               DropdownMenuItem(
-                                   text = { Text(text = "Masculino") },
-                                   onClick = {
-                                       genderDataInicio = "Masculino"
-                                       isExpandedDataInicio = false
+                                DropdownMenuItem(
+                                    text = { Text(text = "Masculino") },
+                                    onClick = {
+                                        genderDataInicio = "Masculino"
+                                        isExpandedDataInicio = false
 
 
-                                   })
-                               DropdownMenuItem(
-                                   text = { Text(text = "Feminino") },
-                                   onClick = {
-                                       genderDataInicio = "Feminino"
-                                       isExpandedDataInicio = false
-                                   })
-                           }
-                       }
-                   }
-               }
-               }
+                                    })
+                                DropdownMenuItem(
+                                    text = { Text(text = "Feminino") },
+                                    onClick = {
+                                        genderDataInicio = "Feminino"
+                                        isExpandedDataInicio = false
+                                    })
+                            }
+                        }
+                    }
+                }
+                Column {
+                    var dataFinal by remember {
+                        mutableStateOf("")
+                    }
+
+                    Text(
+                        text = "Até",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp,
+                        color = Color(0xFF012A4A),
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+
+                            .padding(top = 10.dp)
+                            .padding(start = 33.dp, bottom = 4.dp)
+                    )
+                    var isExpandedDataFinal by remember { mutableStateOf(false) }
+                    var genderDataFinal by remember { mutableStateOf("") }
+
+                    Box(
+                        modifier = Modifier
+                            .padding(start = 9.dp)
+
+                    ) {
+                        ExposedDropdownMenuBox(
+                            expanded = isExpandedDataFinal,
+                            onExpandedChange = { isExpandedDataFinal = it }
+                        ) {
+                            TextField(
+                                value = genderDataFinal,
+                                onValueChange = {},
+                                readOnly = true,
+                                trailingIcon = {
+                                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpandedSexo)
+                                },
+                                colors = ExposedDropdownMenuDefaults.textFieldColors(
+                                    unfocusedContainerColor = Color.White,
+                                    focusedContainerColor = Color.White
+                                ),
+                                modifier = Modifier
+                                    .menuAnchor()
+                                    .clip(RoundedCornerShape(7.dp))
+                                    .height(55.dp)
+                                    .width(170.dp)
+                                    .padding(start = 7.dp, end = 24.dp)
+
+                                    .background(Color.White)
+                                    .align(Alignment.Center)
+
+
+
+                            )
+
+                            DropdownMenu(
+                                expanded = isExpandedDataFinal,
+                                onDismissRequest = { isExpandedDataFinal= false },
+                                modifier = Modifier.fillMaxWidth(),
+
+                                ) {
+                                DropdownMenuItem(
+                                    text = { Text(text = " dia 1:") },
+                                    onClick = {
+                                        genderDataFinal = ""
+                                        genderDataFinal = "dia 1"
+                                        isExpandedDataFinal = false
+                                    }
+                                )
+
+                                DropdownMenuItem(
+                                    text = { Text(text = "Masculino") },
+                                    onClick = {
+                                        genderDataFinal = "Masculino"
+                                        isExpandedDataFinal = false
+
+
+                                    })
+                                DropdownMenuItem(
+                                    text = { Text(text = "Feminino") },
+                                    onClick = {
+                                        genderDataFinal = "Feminino"
+                                        isExpandedDataFinal = false
+                                    })
+                            }
+                        }
+                    }
+                }
+            }
 
             Button(
                 modifier = Modifier

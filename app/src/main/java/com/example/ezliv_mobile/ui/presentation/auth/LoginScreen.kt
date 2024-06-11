@@ -48,6 +48,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.example.ezliv_mobile.ui.configurations.appModule
 import com.example.ezliv_mobile.ui.presentation.auth.view_model.AuthViewModel
+import com.example.ezliv_mobile.ui.presentation.entregas.Entregas
+import com.example.ezliv_mobile.ui.presentation.entregas.view_model.EntregasViewModel
 import com.example.ezliv_mobile.ui.presentation.home.view_model.HomeViewModel
 import com.example.ezliv_mobile.ui.presentation.home.MuralComponent
 import org.koin.android.ext.koin.androidContext
@@ -75,6 +77,13 @@ class MainActivity : ComponentActivity() {
                     val authViewModel by inject<AuthViewModel>();
                     RegisterPassword(navController, authViewModel)
                 }
+                composable("entregas") {
+                    val entregasViewModel by inject<EntregasViewModel>();
+                    entregasViewModel.getPackagesByApartment()
+
+                    Entregas(navController, entregasViewModel)
+                }
+
             }
         }
         startKoin {
