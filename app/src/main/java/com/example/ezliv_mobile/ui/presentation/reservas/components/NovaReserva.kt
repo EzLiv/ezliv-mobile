@@ -95,7 +95,7 @@ fun BoxReserva() {
                 ) {
                     TextField(
                         value = gender,
-                        onValueChange = { /* Aqui você pode adicionar a lógica para alterar o valor */ },
+                        onValueChange = {  },
                         readOnly = true,
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
@@ -172,7 +172,7 @@ fun BoxReserva() {
                 ) {
                     TextField(
                         value = genderData,
-                        onValueChange = { /* Aqui você pode adicionar a lógica para alterar o valor */ },
+                        onValueChange = { },
                         readOnly = true,
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpandedData)

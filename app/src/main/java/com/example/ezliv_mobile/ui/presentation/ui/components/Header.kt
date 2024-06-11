@@ -1,6 +1,8 @@
 package com.example.ezliv_mobile.ui.presentation.ui.components
 
+import android.service.autofill.OnClickAction
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,9 +21,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ezliv_mobile.ui.presentation.home.Mural
 
 @Composable
-fun Header (titulo: String, text1: String, text2: String){
+fun Header (titulo: String, text1: String, text2: String
+){
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -58,7 +62,7 @@ fun Header (titulo: String, text1: String, text2: String){
 
         ){
             Text(text = text1,
-                color = Color.White
+                color = Color.White,
             )
             Text(text = text2,
                 color = Color.White)
@@ -69,5 +73,5 @@ fun Header (titulo: String, text1: String, text2: String){
 @Preview
 @Composable
 fun HeaderPreview() {
-    Header("exemplo", "exemplo", "exemplo")
+    Header("exemplo", "exemplo", "exemplo" )
 }

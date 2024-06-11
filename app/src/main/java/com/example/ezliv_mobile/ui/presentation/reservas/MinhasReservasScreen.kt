@@ -1,4 +1,4 @@
-package com.example.ezliv_mobile.ui.screens
+package com.example.ezliv_mobile.ui.presentation.reservas
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -56,7 +56,7 @@ fun MinhasReservas(
 
 @Preview
 @Composable
-fun MihasReservasPreview() {
+fun MinhasReservasPreview() {
     EzlivmobileTheme {
         MinhasReservas()
     }
