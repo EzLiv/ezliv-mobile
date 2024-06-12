@@ -25,9 +25,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.sql.Date
+import java.sql.Time
 
 @Composable
-fun Reserva() {
+fun Reserva(date: String, startDateTime: String) {
     Box(modifier = Modifier
         .background(color = Color(0xFFD9D9D9))
         .width(350.dp)
@@ -133,5 +135,5 @@ fun Reserva() {
 @Preview(showBackground = true)
 @Composable
 fun ReservaPreview() {
-    Reserva()
+    Reserva("27/8/2024", "19:30")
 }

@@ -52,6 +52,9 @@ import com.example.ezliv_mobile.ui.presentation.entregas.Entregas
 import com.example.ezliv_mobile.ui.presentation.entregas.view_model.EntregasViewModel
 import com.example.ezliv_mobile.ui.presentation.home.view_model.HomeViewModel
 import com.example.ezliv_mobile.ui.presentation.home.MuralComponent
+import com.example.ezliv_mobile.ui.presentation.reservas.MinhasReservas
+import com.example.ezliv_mobile.ui.presentation.reservas.Reservas
+import com.example.ezliv_mobile.ui.presentation.reservas.view_model.ReservaViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.android.ext.android.inject
@@ -82,6 +85,17 @@ class MainActivity : ComponentActivity() {
                     entregasViewModel.getPackagesByApartment()
 
                     Entregas(navController, entregasViewModel)
+                }
+                composable("reservas"){
+                    val reservaViewModel by inject<ReservaViewModel>();
+                    reservaViewModel.getMyReserves()
+
+                    Reservas(navController, reservaViewModel)
+                }
+                composable("nova-reserva"){
+                    val novaReservaViewModel by inject<ReservaViewModel>();
+
+                    MinhasReservas(navController, novaReservaViewModel)
                 }
 
             }

@@ -5,5 +5,5 @@ import java.util.Date
 data class ReservaModel (
     val startDateTime: String,
     val endDateTime: String,
-    val date: Date
+    val date: String
 )
