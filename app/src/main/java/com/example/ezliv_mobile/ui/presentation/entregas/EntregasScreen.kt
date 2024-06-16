@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -22,12 +23,15 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -50,6 +54,7 @@ import com.example.ezliv_mobile.ui.presentation.entregas.view_model.EntregasView
 import com.example.ezliv_mobile.ui.presentation.ui.components.AppBar
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Entregas(
     navController: NavController,
@@ -63,11 +68,29 @@ fun Entregas(
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(topBar = {
-    Header(titulo = "Entregas", text1 = "Para Retirar", text2 = "Entregue")
+        TopAppBar(
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color(0xFF012A4A),
+            ),
+            title = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Entregas",
+                        color = Color.White,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.W500,
+                    )
+                }
+            },
+        )
     },
         bottomBar = {
-            Rodape()
-
+            AppBar(navController)
     }) { padding ->
         Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -83,13 +106,6 @@ fun Entregas(
                             .fillMaxHeight(0.5f)
                             .padding(start = 14.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Arrow Back",
-                            tint = Color.White,
-                            modifier = Modifier.size(32.dp)
-                        )
-
                         Text(
                             text = "Entregas",
                             color = Color.White,
@@ -98,7 +114,6 @@ fun Entregas(
 
                             )
                     }
-
                     TabRow(
                         selectedTabIndex = selectedTab.value,
                         modifier = Modifier.fillMaxSize()
@@ -108,7 +123,7 @@ fun Entregas(
                                 onClick = { coroutineScope.launch { selectedTab.value = index } }) {
                                 Text(
                                     text = title,
-                                    color = Color.White,
+                                    color = Color(0xFF012A4A),
                                     fontSize = 16.sp
                                 )
                             }
@@ -226,16 +241,13 @@ fun Header (titulo: String, text1: String, text2: String){
             Arrangement.Absolute.Left,
             Alignment.CenterVertically
         ){
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "back",
-                tint = Color.White
-
-            )
-            Text(text = titulo,
+            Text(
+                text = titulo,
                 fontWeight = FontWeight.Bold,
                 fontSize = 23.sp,
-                color = Color.White)
+                color = Color.White,
+                modifier = Modifier.align(Alignment.CenterVertically),
+            )
         }
         Row (
             modifier = Modifier
@@ -244,7 +256,6 @@ fun Header (titulo: String, text1: String, text2: String){
                 .height(48.dp),
             Arrangement.SpaceAround,
             Alignment.CenterVertically
-
         ){
             Text(text = text1,
                 color = Color.White

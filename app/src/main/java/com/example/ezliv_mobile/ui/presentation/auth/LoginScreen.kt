@@ -47,6 +47,8 @@ import com.example.ezliv_mobile.R
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.example.ezliv_mobile.ui.configurations.appModule
+import com.example.ezliv_mobile.ui.presentation.apartamento.ApartmentScreen
+import com.example.ezliv_mobile.ui.presentation.apartamento.ApartmentViewModel
 import com.example.ezliv_mobile.ui.presentation.auth.view_model.AuthViewModel
 import com.example.ezliv_mobile.ui.presentation.entregas.Entregas
 import com.example.ezliv_mobile.ui.presentation.entregas.view_model.EntregasViewModel
@@ -83,7 +85,11 @@ class MainActivity : ComponentActivity() {
 
                     Entregas(navController, entregasViewModel)
                 }
-
+                composable("my-apartment") {
+                    val apartmentViewModel by inject<ApartmentViewModel>();
+                    apartmentViewModel.getResidents()
+                    ApartmentScreen(navController, apartmentViewModel)
+                }
             }
         }
         startKoin {
