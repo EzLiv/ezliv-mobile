@@ -50,12 +50,10 @@ fun BoxReserva() {
         ) {
             Text(
                 text = "Reserva",
-
                 fontWeight = FontWeight.Bold,
                 fontSize = 26.sp,
                 color = Color(0xFF012A4A),
                 textAlign = TextAlign.Center,
-
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(0.dp, 0.dp, 0.dp, 20.dp)

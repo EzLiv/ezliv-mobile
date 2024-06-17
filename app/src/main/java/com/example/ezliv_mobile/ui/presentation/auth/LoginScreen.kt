@@ -46,9 +46,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ezliv_mobile.R
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.navigation.NavType
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
 import com.example.ezliv_mobile.ui.configurations.appModule
 import com.example.ezliv_mobile.ui.presentation.apartamento.ApartmentScreen
-import com.example.ezliv_mobile.ui.presentation.apartamento.ApartmentViewModel
+import com.example.ezliv_mobile.ui.presentation.apartamento.PersonalDataScreen
+import com.example.ezliv_mobile.ui.presentation.apartamento.view_model.ApartmentViewModel
 import com.example.ezliv_mobile.ui.presentation.auth.view_model.AuthViewModel
 import com.example.ezliv_mobile.ui.presentation.entregas.Entregas
 import com.example.ezliv_mobile.ui.presentation.entregas.view_model.EntregasViewModel
@@ -89,6 +93,14 @@ class MainActivity : ComponentActivity() {
                     val apartmentViewModel by inject<ApartmentViewModel>();
                     apartmentViewModel.getResidents()
                     ApartmentScreen(navController, apartmentViewModel)
+                }
+                composable("residentDetail/{userId}",
+                    arguments = listOf(navArgument("userId") { type = NavType.StringType })) {
+                    val apartmentViewModel by inject<ApartmentViewModel>();
+                    val backStackEntry = navController.currentBackStackEntryAsState()
+                    val userId = backStackEntry.value?.arguments?.getString("userId") ?: ""
+                    apartmentViewModel.getResidentById(userId)
+                    PersonalDataScreen(navController, apartmentViewModel, isFirstFetch = true)
                 }
             }
         }
