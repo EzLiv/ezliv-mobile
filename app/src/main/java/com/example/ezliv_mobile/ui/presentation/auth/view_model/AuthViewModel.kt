@@ -14,7 +14,7 @@ import com.example.ezliv_mobile.ui.presentation.auth.result.LoginResult
 
 class AuthViewModel(private val authRepository: IAuthRepository, context: Context) : ViewModel() {
 
-    var result = MutableLiveData<LoginResult>(LoginResult.Loading)
+    var result = MutableLiveData<LoginResult>(null)
         private set
 
     private val preferencesManager = PreferencesManager(context)

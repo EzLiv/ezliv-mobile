@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -57,6 +58,7 @@ import com.example.ezliv_mobile.ui.presentation.apartamento.ApartmentScreen
 import com.example.ezliv_mobile.ui.presentation.apartamento.PersonalDataScreen
 import com.example.ezliv_mobile.ui.presentation.apartamento.VisitorDetailScreen
 import com.example.ezliv_mobile.ui.presentation.apartamento.view_model.ApartmentViewModel
+import com.example.ezliv_mobile.ui.presentation.auth.result.LoginResult
 import com.example.ezliv_mobile.ui.presentation.auth.view_model.AuthViewModel
 import com.example.ezliv_mobile.ui.presentation.entregas.Entregas
 import com.example.ezliv_mobile.ui.presentation.entregas.view_model.EntregasViewModel
@@ -100,7 +102,8 @@ class MainActivity : ComponentActivity() {
                     apartmentViewModel.getAllVisitors()
                     ApartmentScreen(navController, apartmentViewModel)
                 }
-                composable("residentDetail/{userId}",
+                composable(
+                    "residentDetail/{userId}",
                     arguments = listOf(navArgument("userId") { type = NavType.StringType })
                 ) {
                     val apartmentViewModel by inject<ApartmentViewModel>();
@@ -110,7 +113,8 @@ class MainActivity : ComponentActivity() {
 
                     PersonalDataScreen(navController, apartmentViewModel, isFirstFetch = true)
                 }
-                composable("visitorDetail/{visitorId}",
+                composable(
+                    "visitorDetail/{visitorId}",
                     arguments = listOf(navArgument("visitorId") { type = NavType.StringType })
                 ) {
                     val apartmentViewModel by inject<ApartmentViewModel>();
@@ -154,9 +158,19 @@ fun Login(navController: NavController, authViewModel: AuthViewModel) {
                 Spacer(modifier = Modifier.height(4.dp))
                 PasswordTextField(senha, onValueChange = { senha = it })
                 Spacer(modifier = Modifier.height(12.dp))
-                LoginButton(onClick = {
-                    authViewModel.login(email, senha, navController = navController)
-                })
+                if (result is LoginResult.Loading) {
+                    CircularProgressIndicator(
+                        color = Color.White,
+                        modifier = Modifier
+                            .width(50.dp)
+                            .height(50.dp)
+                    )
+                } else {
+                    LoginButton(onClick = {
+                        authViewModel.login(email, senha, navController = navController)
+                    })
+                }
+
                 Spacer(modifier = Modifier.height(30.dp))
                 ImageIconBottom()
             }

@@ -29,6 +29,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -91,131 +93,112 @@ fun Entregas(
     },
         bottomBar = {
             AppBar(navController)
-    }) { padding ->
-        Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(120.dp)
-                        .background(Color(0xFF012A4A))
-                        .padding(top = 14.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically, modifier = Modifier
-                            .fillMaxHeight(0.5f)
-                            .padding(start = 14.dp)
-                    ) {
-                        Text(
-                            text = "Entregas",
-                            color = Color.White,
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold,
+        }) {
+        Column(Modifier.padding(it)) {
+            TabRow(
+                selectedTabIndex = selectedTab.value,
+                modifier = Modifier.fillMaxWidth(),
+                indicator = { tabPositions ->
+                    TabRowDefaults.Indicator(
+                        Modifier.tabIndicatorOffset(tabPositions[selectedTab.value]),
+                        color = Color(0xFF012A4A)
+                    )
+                }
+            ) {
+                tabs.forEachIndexed { index, title ->
+                    Tab(
+                        selected = selectedTab.value == index,
+                        onClick = { selectedTab.value = index },
+                        text = { Text(text = title, fontWeight = FontWeight.W500) },
+                        selectedContentColor = Color(0xFF012A4A),
+                        unselectedContentColor = Color.Gray,
+                    )
+                }
+            }
 
+
+            when (entregasResult) {
+                is PackagesResult.Loading -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color.White),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Carregando...",
+                                style = TextStyle(color = Color.Black),
+                                fontSize = 16.sp
                             )
-                    }
-                    TabRow(
-                        selectedTabIndex = selectedTab.value,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        tabs.forEachIndexed{index, title ->
-                            Tab(selected = selectedTab.value == index,
-                                onClick = { coroutineScope.launch { selectedTab.value = index } }) {
-                                Text(
-                                    text = title,
-                                    color = Color(0xFF012A4A),
-                                    fontSize = 16.sp
-                                )
-                            }
                         }
                     }
                 }
 
-                when (entregasResult) {
-                    is PackagesResult.Loading -> {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(Color.White),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(
-                                    text = "Carregando...",
-                                    style = TextStyle(color = Color.Black),
-                                    fontSize = 16.sp
-                                )
-                            }
-                        }
-                    }
-
-                    is PackagesResult.Error -> {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(Color.White),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(
-                                    text = "Erro ao carregar as entregas",
-                                    style = TextStyle(color = Color.Black),
-                                    fontSize = 16.sp
-                                )
-                            }
-                        }
-                    }
-
-
-                    is PackagesResult.Success -> {
-                        val entregasRecebidas = (entregasResult as PackagesResult.Success)
-                            .data.filter { entrega -> entrega.delivered }
-                        val entregasNaoRecebidas = (entregasResult as PackagesResult.Success)
-                            .data.filter { entrega -> !entrega.delivered }
-                        LazyColumn() {
-                            if (selectedTab.value == 0) {
-                                items(entregasNaoRecebidas) { entrega ->
-                                    EntregaItem(
-                                        model = PackageModel(
-                                            entrega.id,
-                                            entrega.code,
-                                            entrega.description,
-                                            entrega.condominiumId,
-                                            entrega.apartmentId,
-                                            entrega.delivered,
-                                            entrega.receiptDate,
-                                            entrega.deliveryDate,
-                                            entrega.apartmentName,
-                                            entrega.towerName
-                                        )
-                                    )
-                                }
-                            } else {
-                                items(entregasRecebidas) { entrega ->
-                                    EntregaItem(
-                                        model = PackageModel(
-                                            entrega.id,
-                                            entrega.code,
-                                            entrega.description,
-                                            entrega.condominiumId,
-                                            entrega.apartmentId,
-                                            entrega.delivered,
-                                            entrega.receiptDate,
-                                            entrega.deliveryDate,
-                                            entrega.apartmentName,
-                                            entrega.towerName
-                                        )
-                                    )
-                                }
-                            }
-
+                is PackagesResult.Error -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color.White),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Erro ao carregar as entregas",
+                                style = TextStyle(color = Color.Black),
+                                fontSize = 16.sp
+                            )
                         }
                     }
                 }
 
 
+                is PackagesResult.Success -> {
+                    val entregasRecebidas = (entregasResult as PackagesResult.Success)
+                        .data.filter { entrega -> entrega.delivered }
+                    val entregasNaoRecebidas = (entregasResult as PackagesResult.Success)
+                        .data.filter { entrega -> !entrega.delivered }
+                    LazyColumn(Modifier.padding(16.dp)) {
+                        if (selectedTab.value == 0) {
+                            items(entregasNaoRecebidas) { entrega ->
+                                EntregaItem(
+                                    model = PackageModel(
+                                        entrega.id,
+                                        entrega.code,
+                                        entrega.description,
+                                        entrega.condominiumId,
+                                        entrega.apartmentId,
+                                        entrega.delivered,
+                                        entrega.receiptDate,
+                                        entrega.deliveryDate,
+                                        entrega.apartmentName,
+                                        entrega.towerName
+                                    )
+                                )
+                            }
+                        } else {
+                            items(entregasRecebidas) { entrega ->
+                                EntregaItem(
+                                    model = PackageModel(
+                                        entrega.id,
+                                        entrega.code,
+                                        entrega.description,
+                                        entrega.condominiumId,
+                                        entrega.apartmentId,
+                                        entrega.delivered,
+                                        entrega.receiptDate,
+                                        entrega.deliveryDate,
+                                        entrega.apartmentName,
+                                        entrega.towerName
+                                    )
+                                )
+                            }
+                        }
+
+                    }
+                }
             }
 
 
@@ -223,137 +206,10 @@ fun Entregas(
 
 
     }
-}
-@Composable
-fun Header (titulo: String, text1: String, text2: String){
-    Column (
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = Color.White)
-            .height(106.dp)
-    ){
-        Row (
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = Color(0xFF012A4A))
-                .height(58.dp)
-                .padding(10.dp),
-            Arrangement.Absolute.Left,
-            Alignment.CenterVertically
-        ){
-            Text(
-                text = titulo,
-                fontWeight = FontWeight.Bold,
-                fontSize = 23.sp,
-                color = Color.White,
-                modifier = Modifier.align(Alignment.CenterVertically),
-            )
-        }
-        Row (
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = Color(0xFF012A4A))
-                .height(48.dp),
-            Arrangement.SpaceAround,
-            Alignment.CenterVertically
-        ){
-            Text(text = text1,
-                color = Color.White
-            )
-            Text(text = text2,
-                color = Color.White)
-        }
-    }
+
+
 }
 
-@Composable
-fun Rodape() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = Color(0xFF012A4A))
-            .height(60.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        itemRodape()
-        itemRodape1()
-        itemRodape2()
-        itemRodape3()
-    }
-}
-
-@Composable
-fun itemRodape() {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Icon(
-            imageVector = Icons.Default.Home,
-            contentDescription = "home",
-            tint = Color.White
-        )
-        Text(
-            text = "Início",
-            style = TextStyle(color = Color.White)
-        )
-    }
-}
-
-@Composable
-fun itemRodape1() {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Icon(
-            imageVector = Icons.Default.Email,
-            contentDescription = "email",
-            tint = Color.White
-        )
-        Text(
-            text = "Entregas",
-            style = TextStyle(color = Color.White)
-        )
-    }
-}
-
-@Composable
-fun itemRodape2() {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Icon(
-            imageVector = Icons.Filled.Person,
-            contentDescription = "apartamento",
-            tint = Color.White
-        )
-        Text(
-            text = "Apartamento",
-            style = TextStyle(color = Color.White)
-        )
-    }
-}
-
-@Composable
-fun itemRodape3() {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Icon(
-            imageVector = Icons.Default.DateRange,
-            contentDescription = "Calendario",
-            tint = Color.White
-        )
-        Text(
-            text = "Reservas",
-            style = TextStyle(color = Color.White)
-        )
-    }
-}
 
 
 
