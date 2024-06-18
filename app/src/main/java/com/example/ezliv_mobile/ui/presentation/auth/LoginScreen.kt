@@ -61,6 +61,8 @@ import com.example.ezliv_mobile.ui.presentation.apartamento.VisitorDetailScreen
 import com.example.ezliv_mobile.ui.presentation.apartamento.view_model.ApartmentViewModel
 import com.example.ezliv_mobile.ui.presentation.auth.result.LoginResult
 import com.example.ezliv_mobile.ui.presentation.auth.view_model.AuthViewModel
+import com.example.ezliv_mobile.ui.presentation.bills.BillsPage
+import com.example.ezliv_mobile.ui.presentation.bills.view_model.BillsViewModel
 import com.example.ezliv_mobile.ui.presentation.entregas.Entregas
 import com.example.ezliv_mobile.ui.presentation.entregas.view_model.EntregasViewModel
 import com.example.ezliv_mobile.ui.presentation.home.view_model.HomeViewModel
@@ -134,12 +136,17 @@ class MainActivity : ComponentActivity() {
                 }
                 composable("reserves") {
                     val reserveViewModel by inject<ReserveViewModel>();
+                    reserveViewModel.getReserves()
                     ReservesPage(navController, reserveViewModel)
                 }
                 composable("addReserve") {
                     val reserveViewModel by inject<ReserveViewModel>();
                     reserveViewModel.getCommonAreas()
                     NewReservePage(navController, reserveViewModel)
+                }
+                composable("bills") {
+                    val billsViewModel by inject<BillsViewModel>();
+                    BillsPage(navController, billsViewModel)
                 }
             }
         }

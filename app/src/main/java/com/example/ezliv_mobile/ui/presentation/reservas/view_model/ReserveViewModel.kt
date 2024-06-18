@@ -10,7 +10,9 @@ import com.example.ezliv_mobile.ui.domain.reserves.model.NewReserveModel
 import com.example.ezliv_mobile.ui.domain.reserves.repositories.IReserveRepository
 import com.example.ezliv_mobile.ui.presentation.entregas.results.PackagesResult
 import com.example.ezliv_mobile.ui.presentation.reservas.results.CreateReserveResult
+import com.example.ezliv_mobile.ui.presentation.reservas.results.DeleteReserveResult
 import com.example.ezliv_mobile.ui.presentation.reservas.results.GetCommonAreasResult
+import com.example.ezliv_mobile.ui.presentation.reservas.results.GetReservesResult
 import kotlinx.coroutines.launch
 
 class ReserveViewModel (private val reserveRepository: IReserveRepository, context: Context)  : ViewModel() {
@@ -20,6 +22,12 @@ class ReserveViewModel (private val reserveRepository: IReserveRepository, conte
         private set
 
     var createReserveResult = MutableLiveData<CreateReserveResult>(null)
+        private set
+
+    var getAllReservesResult = MutableLiveData<GetReservesResult>(null)
+        private set
+
+    var deleteReserveResult = MutableLiveData<DeleteReserveResult>(null)
         private set
 
     fun getCommonAreas(){
@@ -52,6 +60,39 @@ class ReserveViewModel (private val reserveRepository: IReserveRepository, conte
                 }
             } catch (e: Exception) {
                 createReserveResult.value = CreateReserveResult.Error(e.message ?: "")
+            }
+        }
+    }
+
+    fun getReserves(){
+        viewModelScope.launch {
+            try {
+                getAllReservesResult.value = GetReservesResult.Loading
+                val residentId = preferencesManager.getData("id", "")
+                val response = reserveRepository.getAllReserves(residentId)
+                if (response.isSuccessful) {
+                    getAllReservesResult.value =  GetReservesResult.Success(response.body() ?: emptyList())
+                } else {
+                    throw Exception("Erro ao buscar reservas")
+                }
+            } catch (e: Exception) {
+                getAllReservesResult.value = GetReservesResult.Error(e.message ?: "")
+            }
+        }
+    }
+
+    fun deleteReserve(reserveId : String){
+        viewModelScope.launch {
+            try {
+                deleteReserveResult.value = DeleteReserveResult.Loading
+                val response = reserveRepository.deleteReserve(reserveId)
+                if (response.isSuccessful) {
+                    deleteReserveResult.value =  DeleteReserveResult.Success(Unit)
+                } else {
+                    throw Exception("Erro ao buscar reservas")
+                }
+            } catch (e: Exception) {
+                deleteReserveResult.value = DeleteReserveResult.Error(e.message ?: "")
             }
         }
     }
