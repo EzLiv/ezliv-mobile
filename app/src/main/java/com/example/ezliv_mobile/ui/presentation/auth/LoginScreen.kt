@@ -1,8 +1,10 @@
 package com.example.ezliv_mobile.ui.presentation.auth
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -50,8 +52,10 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.example.ezliv_mobile.ui.configurations.appModule
+import com.example.ezliv_mobile.ui.presentation.apartamento.AddVisitorPage
 import com.example.ezliv_mobile.ui.presentation.apartamento.ApartmentScreen
 import com.example.ezliv_mobile.ui.presentation.apartamento.PersonalDataScreen
+import com.example.ezliv_mobile.ui.presentation.apartamento.VisitorDetailScreen
 import com.example.ezliv_mobile.ui.presentation.apartamento.view_model.ApartmentViewModel
 import com.example.ezliv_mobile.ui.presentation.auth.view_model.AuthViewModel
 import com.example.ezliv_mobile.ui.presentation.entregas.Entregas
@@ -63,6 +67,7 @@ import org.koin.core.context.startKoin
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -92,15 +97,32 @@ class MainActivity : ComponentActivity() {
                 composable("my-apartment") {
                     val apartmentViewModel by inject<ApartmentViewModel>();
                     apartmentViewModel.getResidents()
+                    apartmentViewModel.getAllVisitors()
                     ApartmentScreen(navController, apartmentViewModel)
                 }
                 composable("residentDetail/{userId}",
-                    arguments = listOf(navArgument("userId") { type = NavType.StringType })) {
+                    arguments = listOf(navArgument("userId") { type = NavType.StringType })
+                ) {
                     val apartmentViewModel by inject<ApartmentViewModel>();
                     val backStackEntry = navController.currentBackStackEntryAsState()
                     val userId = backStackEntry.value?.arguments?.getString("userId") ?: ""
                     apartmentViewModel.getResidentById(userId)
+
                     PersonalDataScreen(navController, apartmentViewModel, isFirstFetch = true)
+                }
+                composable("visitorDetail/{visitorId}",
+                    arguments = listOf(navArgument("visitorId") { type = NavType.StringType })
+                ) {
+                    val apartmentViewModel by inject<ApartmentViewModel>();
+                    val backStackEntry = navController.currentBackStackEntryAsState()
+                    val userId = backStackEntry.value?.arguments?.getString("visitorId") ?: ""
+                    apartmentViewModel.getVisitorById(userId)
+
+                    VisitorDetailScreen(navController, apartmentViewModel)
+                }
+                composable("addVisitor") {
+                    val apartmentViewModel by inject<ApartmentViewModel>();
+                    AddVisitorPage(navController, apartmentViewModel)
                 }
             }
         }

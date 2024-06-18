@@ -15,7 +15,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -40,6 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ezliv_mobile.ui.domain.apartment.models.Resident
+import com.example.ezliv_mobile.ui.presentation.apartamento.components.VisitorCard
+import com.example.ezliv_mobile.ui.presentation.apartamento.results.GetVisitorsResult
 import com.example.ezliv_mobile.ui.presentation.apartamento.results.ResidentResult
 import com.example.ezliv_mobile.ui.presentation.apartamento.view_model.ApartmentViewModel
 import com.example.ezliv_mobile.ui.presentation.ui.components.AppBar
@@ -55,6 +59,8 @@ fun ApartmentScreen(navController: NavController, apartmentViewModel: ApartmentV
     val selectedTabColor = Color(0xFF012A4A)
 
     val residentResult by apartmentViewModel.residentResult.observeAsState()
+
+    val visitorsResult by apartmentViewModel.getVisitorsResult.observeAsState()
 
 
     Scaffold(
@@ -79,6 +85,19 @@ fun ApartmentScreen(navController: NavController, apartmentViewModel: ApartmentV
                     }
                 },
             )
+        },
+        floatingActionButton = {
+            if (selectedTabIndex == 1) {
+                FloatingActionButton(
+                    onClick = {
+                        navController.navigate("addVisitor")
+                    },
+                    containerColor = Color(0xFF012A4A),
+                    contentColor = Color.White
+                ) {
+                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add Visitor")
+                }
+            }
         },
         bottomBar = {
             AppBar(navController)
@@ -114,7 +133,7 @@ fun ApartmentScreen(navController: NavController, apartmentViewModel: ApartmentV
                 }
 
                 1 -> {
-                    VisitorsTab()
+                    VisitorsTab(visitorsResult, navController)
                 }
             }
 
@@ -132,9 +151,9 @@ fun ResidentsTab(residentResult: ResidentResult?, navController: NavController) 
             fontSize = 20.sp,
             modifier = Modifier.padding(16.dp)
         )
-        when(residentResult){
+        when (residentResult) {
             is ResidentResult.Success -> {
-                LazyColumn{
+                LazyColumn {
                     items(residentResult.data.size) {
                         ResidentCard(
                             onClick = {
@@ -145,18 +164,24 @@ fun ResidentsTab(residentResult: ResidentResult?, navController: NavController) 
                     }
                 }
             }
+
             is ResidentResult.Error -> {
                 Text(
                     text = "Erro ao carregar moradores",
                     fontSize = 16.sp,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterHorizontally)
                 )
             }
+
             is ResidentResult.Loading -> {
                 Text(
                     text = "Carregando moradores...",
                     fontSize = 16.sp,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterHorizontally)
                 )
             }
         }
@@ -222,6 +247,7 @@ fun ResidentCard(onClick: () -> Unit, resident: Resident) {
     }
 
 }
+
 fun formatCpf(cpf: String): String {
     if (cpf.length != 11) {
         throw IllegalArgumentException("O CPF deve conter 11 dígitos.")
@@ -230,11 +256,48 @@ fun formatCpf(cpf: String): String {
 }
 
 @Composable
-fun VisitorsTab() {
-    Text(
-        text = "Visitantes",
-        fontSize = 20.sp,
-        modifier = Modifier.padding(16.dp)
-    )
+fun VisitorsTab(visitorsResult: GetVisitorsResult?, navController: NavController) {
+    Column {
+        Text(
+            text = "Visitantes",
+            fontSize = 20.sp,
+            modifier = Modifier.padding(16.dp)
+        )
+
+        when (visitorsResult) {
+            is GetVisitorsResult.Success -> {
+                LazyColumn {
+                    items(visitorsResult.data.size) {
+                        VisitorCard(
+                            onClick = {
+                                navController.navigate("visitorDetail/${visitorsResult.data[it].id}")
+                            },
+                            visitor = visitorsResult.data[it]
+                        )
+                    }
+                }
+            }
+
+            is GetVisitorsResult.Error -> {
+                Text(
+                    text = "Erro ao carregar visitantes",
+                    fontSize = 16.sp,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
+            }
+
+            is GetVisitorsResult.Loading -> {
+                Text(
+                    text = "Carregando visitantes...",
+                    fontSize = 16.sp,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
+            }
+        }
+    }
 }
 
