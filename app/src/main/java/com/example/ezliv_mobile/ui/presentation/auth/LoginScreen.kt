@@ -21,6 +21,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -64,6 +65,9 @@ import com.example.ezliv_mobile.ui.presentation.entregas.Entregas
 import com.example.ezliv_mobile.ui.presentation.entregas.view_model.EntregasViewModel
 import com.example.ezliv_mobile.ui.presentation.home.view_model.HomeViewModel
 import com.example.ezliv_mobile.ui.presentation.home.MuralComponent
+import com.example.ezliv_mobile.ui.presentation.reservas.pages.NewReservePage
+import com.example.ezliv_mobile.ui.presentation.reservas.pages.ReservesPage
+import com.example.ezliv_mobile.ui.presentation.reservas.view_model.ReserveViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.android.ext.android.inject
@@ -128,6 +132,15 @@ class MainActivity : ComponentActivity() {
                     val apartmentViewModel by inject<ApartmentViewModel>();
                     AddVisitorPage(navController, apartmentViewModel)
                 }
+                composable("reserves") {
+                    val reserveViewModel by inject<ReserveViewModel>();
+                    ReservesPage(navController, reserveViewModel)
+                }
+                composable("addReserve") {
+                    val reserveViewModel by inject<ReserveViewModel>();
+                    reserveViewModel.getCommonAreas()
+                    NewReservePage(navController, reserveViewModel)
+                }
             }
         }
         startKoin {
@@ -144,6 +157,12 @@ fun Login(navController: NavController, authViewModel: AuthViewModel) {
     var email by remember { mutableStateOf(value = "") }
     var senha by remember { mutableStateOf(value = "") }
     val result by authViewModel.result.observeAsState()
+
+    var showErrorBottomSheet by remember { mutableStateOf(false) }
+
+    if (result is LoginResult.Error && !showErrorBottomSheet) {
+        showErrorBottomSheet = true
+    }
 
     Scaffold {
         Box(Modifier.padding(it)) {
@@ -170,9 +189,35 @@ fun Login(navController: NavController, authViewModel: AuthViewModel) {
                         authViewModel.login(email, senha, navController = navController)
                     })
                 }
-
                 Spacer(modifier = Modifier.height(30.dp))
                 ImageIconBottom()
+
+                if (showErrorBottomSheet) {
+                    AlertDialog(
+                        onDismissRequest = {
+                            showErrorBottomSheet = false
+                            authViewModel.result.value = null
+                        },
+                        title = { Text("Erro ao fazer login") },
+                        text = { Text("Verifique seu email e senha e tente novamente.") },
+                        confirmButton = {
+                            Button(
+                                onClick = {
+                                    showErrorBottomSheet = false
+                                    authViewModel.result.value = null
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(0xFF001A2E),
+                                    contentColor = Color.White,
+                                ),
+                            ) {
+                                Text("Fechar", color = Color.White)
+                            }
+                        },
+                        modifier = Modifier.padding(16.dp)
+                    )
+
+                }
             }
         }
     }

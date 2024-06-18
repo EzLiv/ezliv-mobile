@@ -68,7 +68,7 @@ fun AppBar(
         AppBarItem(
             navController = navController,
             currentRoute = currentRouteName,
-            route = "reservas",
+            route = "reserves",
             icon = Icons.Filled.DateRange,
             text = "Reservas"
         )

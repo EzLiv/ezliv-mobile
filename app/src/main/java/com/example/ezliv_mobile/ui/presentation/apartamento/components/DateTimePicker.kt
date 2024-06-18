@@ -30,8 +30,11 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun LocalDateTime.toFormattedString(): String {
@@ -49,6 +52,49 @@ fun String.toLocalDateTime(): LocalDateTime {
 fun LocalDateTime.toApiFormat(): String {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
     return this.format(formatter)
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun LocalDate.toFormattedString(): String {
+    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    return this.format(formatter)
+}
+@RequiresApi(Build.VERSION_CODES.O)
+fun LocalTime.toFormattedString(): String {
+    val formatter = DateTimeFormatter.ofPattern("HH:mm")
+    return this.format(formatter)
+}
+@RequiresApi(Build.VERSION_CODES.O)
+fun String.toLocalTime(): LocalTime? {
+    return try {
+        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        LocalTime.parse(this, formatter)
+    } catch (e: DateTimeParseException) {
+        e.printStackTrace()
+        null
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun LocalDate.toApiFormat(): String {
+    return try {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        this.format(formatter)
+    } catch (e: DateTimeParseException) {
+        e.printStackTrace()
+        ""
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun LocalTime.toApiFormat(): String {
+    return try {
+        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        this.format(formatter)
+    } catch (e: DateTimeParseException) {
+        e.printStackTrace()
+        ""
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
